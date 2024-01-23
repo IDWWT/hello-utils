@@ -1,14 +1,14 @@
 version: '3.8'
 
 services:
-  python-server:
-    container_name: python-server
+  hello-user:
+    container_name: hello-user
     build:
-      context: ./python-server
+      context: ./hello-user
       dockerfile: Dockerfile
     ports:
       - 8000:5000
     develop:
       watch:
         - action: rebuild
-          path: ./python-server
+          path: ./hello-user
