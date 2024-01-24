@@ -6,9 +6,15 @@ services:
     build:
       context: ./hello-user
       dockerfile: Dockerfile
+      target: development
     ports:
       - 8000:5000
     develop:
       watch:
-        - action: rebuild
+        - action: sync
           path: ./hello-user
+          target: /app
+          ignore:
+            - requirements.txt
+        - action: rebuild
+          path: ./hello-user/requirements.txt
