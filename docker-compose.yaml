@@ -1,0 +1,20 @@
+version: '3.8'
+
+services:
+  hello-user:
+    container_name: hello-user
+    build:
+      context: ./hello-user
+      dockerfile: Dockerfile
+      target: development
+    ports:
+      - 8000:5000
+    develop:
+      watch:
+        - action: sync
+          path: ./hello-user
+          target: /app
+          ignore:
+            - requirements.txt
+        - action: rebuild
+          path: ./hello-user/requirements.txt
