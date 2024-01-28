@@ -1,5 +1,0 @@
-.gitignore
-Dockerfile
-migrate_clean.sh
-migrate_dev.sh
-migrate_prod.sh

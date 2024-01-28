@@ -42,13 +42,6 @@ const checkIsDevFile = (fileName) => {
 	return fileName.split('-')[0].split('_')[2] > 100;
 }
 
-const CONFIG_PATH = path.join('config');
-const PROD_PATH = path.join('prod');
-const DEV_PATH = path.join('dev');
-
-const prodSqlFileNames = fs.readdirSync(PROD_PATH);
-const devSqlFileNames = fs.readdirSync(DEV_PATH);
-
 const migrateType = process.argv[2];
 const connection = await getRawSqlClient();
 
@@ -56,6 +49,13 @@ if (migrateType === 'clean') {
 	await connection.query(`DROP DATABASE ${process.env.MYSQL_DATABASE}`);
 	await connection.query(`CREATE DATABASE ${process.env.MYSQL_DATABASE}`);
 } else {
+	const CONFIG_PATH = path.join('config');
+	const PROD_PATH = path.join('prod');
+	const DEV_PATH = path.join('dev');
+
+	const prodSqlFileNames = fs.readdirSync(PROD_PATH);
+	const devSqlFileNames = fs.readdirSync(DEV_PATH);
+
 	await connection.execute(fs.readFileSync(path.join(CONFIG_PATH, '0_0_1-create_migration_table.sql')).toString());
 
 	const [rows, fields] = await connection.query(`
