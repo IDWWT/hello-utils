@@ -1,2 +1,6 @@
 docker build -t hello-migration-image ./migration
-docker run --rm --network hell-network -w /app hello-migration-image npm run clean
+docker run \
+  --rm \
+  --network hell-network \
+  -w /app hello-migration-image \
+  npm run clean
