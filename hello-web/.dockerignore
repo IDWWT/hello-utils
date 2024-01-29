@@ -1,0 +1,11 @@
+**/.DS_Store
+**/.dockerignore
+**/.git
+**/.gitignore
+**/.vs
+**/.vscode
+**/docker-compose*
+**/Dockerfile*
+**/node_modules
+**/.next
+README.md
