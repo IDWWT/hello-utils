@@ -1,6 +1,27 @@
 version: '3.8'
 
 services:
+  hello-code:
+    container_name: hello-code
+    build:
+      context: ./hello-code
+      dockerfile: Dockerfile
+      target: development
+    ports:
+      - 13020:8080 # application port
+      - 13021:8000 # debugger port
+    develop:
+      watch:
+        - action: rebuild
+          path: ./hello-code/src
+          target: /app/src
+        - action: rebuild
+          path: ./hello-code/gradle
+        - action: rebuild
+          path: ./hello-code/build.gradle
+        - action: rebuild
+          path: ./hello-code/settings.gradle
+
   hello-user:
     container_name: hello-user
     build:
