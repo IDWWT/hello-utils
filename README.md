@@ -9,4 +9,7 @@ docker-compose watch
 
 # stop project
 docker-compose down
+
+# view logs
+docker compose logs -f <service-name>
 ```
