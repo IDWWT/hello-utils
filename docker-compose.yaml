@@ -22,6 +22,30 @@ services:
         - action: rebuild
           path: ./hello-code/settings.gradle
 
+  hello-web:
+    container_name: hello-web
+    build:
+      context: ./hello-web
+      dockerfile: Dockerfile
+      target: development
+    ports:
+      - 13010:3000
+    develop:
+      watch:
+        - action: sync
+          path: ./hello-web
+          target: /app
+          ignore:
+            - node_modules
+            - package.json
+            - package-lock.json
+        - action: rebuild
+          path: ./hello-web/package.json
+        - action: rebuild
+          path: ./hello-web/package-lock.json
+        - action: rebuild
+          path: ./hello-web/next.config.js
+
   hello-user:
     container_name: hello-user
     build:
