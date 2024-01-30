@@ -9,6 +9,9 @@ docker-compose watch
 
 # stop project
 docker-compose down
+
+# view logs
+docker compose logs -f <service-name>
 ```
 
 ## db 마이그레이션 tool
