@@ -63,3 +63,28 @@ services:
             - requirements.txt
         - action: rebuild
           path: ./hello-user/requirements.txt
+
+  mysql:
+    container_name: hello-db
+    image: mysql:latest
+    environment:
+      MYSQL_ROOT_PASSWORD: root1234
+      MYSQL_DATABASE: hello_util
+      MYSQL_USER: local_user
+      MYSQL_PASSWORD: user1234
+    ports:
+      - "13001:3306"
+    command:
+      [
+        "mysqld",
+        "--character-set-server=utf8mb4",
+        "--collation-server=utf8mb4_bin"
+      ]
+    volumes:
+      - ./mysql/data:/var/lib/mysql
+    networks:
+      - default
+
+networks:
+  default:
+    name: hell-network

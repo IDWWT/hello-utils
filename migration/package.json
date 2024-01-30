@@ -1,0 +1,14 @@
+{
+  "name": "hello-migration",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "init:prod": "node index.mjs prod",
+    "init:dev": "node index.mjs dev",
+    "clean": "node index.mjs clean"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.1",
+    "mysql2": "^3.9.0"
+  }
+}
