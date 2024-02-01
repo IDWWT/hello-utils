@@ -85,6 +85,13 @@ services:
     networks:
       - default
 
+  redis:
+    container_name: hello-redis
+    image: redis:latest
+    ports:
+      - "13002:6379"
+    command: redis-server
+
 networks:
   default:
     name: hell-network
