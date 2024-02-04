@@ -11,7 +11,6 @@ export default async function SessionManage() {
   if (user) {
     const userUniqueKey: UserUniqueKey = {
       userEmail: user.email!,
-      provider: 'GITHUB',
     };
     const userId = await getUserId(userUniqueKey)
 

@@ -2,17 +2,15 @@ import RDSConnection from "./rds";
 import { Connection, RowDataPacket } from "mysql2/promise";
 import RedisConnection from "./redis";
 
-export type Provider = "GITHUB";
 export type UserUniqueKey = {
   userEmail: string;
-  provider: Provider;
 };
 export type UserAccessToken = {
   userId: string;
   accessToken: string;
 }
 
-export const getUserId = async ({ userEmail, provider }: UserUniqueKey): Promise<string | null> => {
+export const getUserId = async ({ userEmail }: UserUniqueKey): Promise<string | null> => {
   return RDSConnection.transactionExecutor(async (connection: Connection) => {
     let query = '';
     let params: any[] = [];
@@ -21,11 +19,9 @@ export const getUserId = async ({ userEmail, provider }: UserUniqueKey): Promise
       SELECT user_id AS userId
       FROM user_master
       WHERE user_email = ?
-      AND provider = ?
     `;
 
     params.push(userEmail);
-    params.push(provider);
 
     const [rows, fields] = await connection.query(query, params);
     const user = (rows as RowDataPacket[])[0];
@@ -33,20 +29,19 @@ export const getUserId = async ({ userEmail, provider }: UserUniqueKey): Promise
   });
 };
 
-export const createUser = async ({ userEmail, provider }: UserUniqueKey) => {
+export const createUser = async ({ userEmail }: UserUniqueKey) => {
   return RDSConnection.transactionExecutor(async (connection: Connection) => {
     let query = '';
     let params: any[] = [];
 
     query += `
       INSERT INTO user_master
-        (user_id, user_email, provider, role_code)
+        (user_id, user_email, role_code)
       VALUES
-        (UUID(), ?, ?, 'NORMAL')
+        (UUID(), ?, 'NORMAL')
     `;
 
     params.push(userEmail);
-    params.push(provider);
 
     const result = await connection.execute(query, params);
     return result[0];
