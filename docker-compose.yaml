@@ -52,6 +52,7 @@ services:
       context: ./hello-user
       dockerfile: Dockerfile
       target: development
+    restart: always
     ports:
       - 8000:5000
     develop:
