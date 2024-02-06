@@ -83,8 +83,6 @@ services:
       ]
     volumes:
       - ./mysql/data:/var/lib/mysql
-    networks:
-      - default
 
   redis:
     container_name: hello-redis
