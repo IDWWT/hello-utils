@@ -1,18 +1,19 @@
 import { auth } from "@/auth"
 import { SignInButton, SignOutButton } from '@/components/auth-components'
-import { getUserId, createUser, UserUniqueKey, setAccessToken, UserAccessToken } from "@/utils/user"
-import { Session } from "next-auth";
+import { createUser, UserUniqueKey, setAccessToken, UserAccessToken } from "@/utils/user"
 import { cookies } from 'next/headers'
+import { getUserIdByEmail } from "@/utils/graphql";
 
 export default async function SessionManage() {
   const session = await auth();
-  const user = session?.user; 
+  const user = session?.user;
 
   if (user) {
     const userUniqueKey: UserUniqueKey = {
       userEmail: user.email!,
     };
-    const userId = await getUserId(userUniqueKey)
+    const userId = await getUserIdByEmail(userUniqueKey);
+    console.log(userId);
 
     if (userId) {
       const userAccessToken: UserAccessToken = {

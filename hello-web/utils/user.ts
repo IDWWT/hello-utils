@@ -10,25 +10,6 @@ export type UserAccessToken = {
   accessToken: string;
 }
 
-export const getUserId = async ({ userEmail }: UserUniqueKey): Promise<string | null> => {
-  return RDSConnection.transactionExecutor(async (connection: Connection) => {
-    let query = '';
-    let params: any[] = [];
-
-    query += `
-      SELECT user_id AS userId
-      FROM user_master
-      WHERE user_email = ?
-    `;
-
-    params.push(userEmail);
-
-    const [rows, fields] = await connection.query(query, params);
-    const user = (rows as RowDataPacket[])[0];
-    return user ? user['userId'] : null;
-  });
-};
-
 export const createUser = async ({ userEmail }: UserUniqueKey) => {
   return RDSConnection.transactionExecutor(async (connection: Connection) => {
     let query = '';
