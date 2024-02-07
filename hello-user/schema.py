@@ -1,38 +1,26 @@
+from operator import and_
 from models import UserRole as UserRoleModel, UserMaster as UserMasterModel
-from graphene import Connection, Int
-
 import graphene
-from graphene import relay
-from graphene_sqlalchemy import SQLAlchemyConnectionField, SQLAlchemyObjectType
-
-class ExtendedConnection(Connection):
-    class Meta:
-        abstract = True
-
-    total_count = Int()
-    edge_count = Int()
-
-    def resolve_total_count(root, info, **kwargs):
-        return root.length
-    def resolve_edge_count(root, info, **kwargs):
-        return len(root.edges)
+from graphene_sqlalchemy import SQLAlchemyObjectType
 
 class UserRole(SQLAlchemyObjectType):
     class Meta:
         model = UserRoleModel
-        interfaces = (relay.Node,)
 
 class UserMaster(SQLAlchemyObjectType):
     class Meta:
         model = UserMasterModel
-        interfaces = (relay.Node,)
-        connection_class = ExtendedConnection
-
+    
 class Query(graphene.ObjectType):
-    node = relay.Node.Field()
+    users = graphene.List(UserMaster, user_email=graphene.String(required=False))
 
-    user_role = SQLAlchemyConnectionField(UserRole.connection)
-    user_master = SQLAlchemyConnectionField(UserMaster.connection)
+    def resolve_users(self, info, user_email=None):
+        query = UserMaster.get_query(info)
+
+        if user_email:
+            query = query.filter(UserMasterModel.user_email == user_email)
+
+        return query.all()
 
 
 schema = graphene.Schema(query=Query)
