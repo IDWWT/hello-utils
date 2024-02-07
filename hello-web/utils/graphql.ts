@@ -4,7 +4,6 @@ import { gql } from "@apollo/client";
 import { UserUniqueKey } from "@/utils/user"
 
 export const { getClient } = registerApolloClient(() => {
-  console.log('url', `${process.env.HELLO_USER_API_URL}/graphql`);
   return new ApolloClient({
     cache: new InMemoryCache(),
     link: new HttpLink({
@@ -18,25 +17,19 @@ export const { getClient } = registerApolloClient(() => {
 });
 
 export const getUserIdByEmail = async ({ userEmail }: UserUniqueKey) => {
-  const query = gql`{
-    userMaster {
-      edges {
-        node {
-          id
-          userId
-          userEmail
-          userRole {
+  const query = gql`
+    query ($userEmail: String!){
+        users(userEmail: $userEmail) {
+            userId
+            userEmail
             roleCode
-            roleName
-          }
-          socialId
-          createdAt
-          updatedAt
+            socialId
+            createdAt
+            updatedAt
         }
-      }
     }
-  }`
+  `
 
-  const { data } = await getClient().query({ query });
-  return data.userMaster.edges[0].node.userId;
+  const { data } = await getClient().query({ query, variables: { userEmail } });
+  return data.users[0]?.userId;
 }

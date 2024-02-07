@@ -13,7 +13,6 @@ export default async function SessionManage() {
       userEmail: user.email!,
     };
     const userId = await getUserIdByEmail(userUniqueKey);
-    console.log(userId);
 
     if (userId) {
       const userAccessToken: UserAccessToken = {
