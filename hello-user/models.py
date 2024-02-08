@@ -3,6 +3,16 @@ from database import Base
 from sqlalchemy import Column, DateTime, ForeignKey, String, Enum
 from sqlalchemy.sql import func
 from sqlalchemy.orm import backref, relationship
+from database import db_session
+
+class CRUD():
+    def save(self):
+        db_session.add(self)
+        db_session.commit()
+
+    def destroy(self):
+        db_session.delete(self)
+        db_session.commit()
 
 class YN(enum.Enum):
     Y = 'Y'
@@ -19,7 +29,7 @@ class UserRole(Base):
     created_at = Column(DateTime, nullable=False, server_default=func.now())
     updated_at = Column(DateTime, nullable=False, server_default=func.now())
 
-class UserMaster(Base):
+class UserMaster(Base, CRUD):
     __tablename__ = "user_master"
     user_id = Column(String(36), primary_key=True)
     user_email = Column(String(320), nullable=False, unique=True)

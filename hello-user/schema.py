@@ -21,9 +21,7 @@ class UserMasterMutation(graphene.Mutation):
 
     def mutate(self, info, user_email):
         user = UserMasterModel(user_id=uuid.uuid4(), user_email=user_email)
-
-        db_session.add(user)
-        db_session.commit()
+        user.save()
 
         return UserMasterMutation(user=user)
 
