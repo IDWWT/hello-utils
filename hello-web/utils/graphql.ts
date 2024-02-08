@@ -18,18 +18,28 @@ export const { getClient } = registerApolloClient(() => {
 
 export const getUserIdByEmail = async ({ userEmail }: UserUniqueKey) => {
   const query = gql`
-    query ($userEmail: String!){
+    query Users($userEmail: String!) {
         users(userEmail: $userEmail) {
             userId
-            userEmail
-            roleCode
-            socialId
-            createdAt
-            updatedAt
         }
     }
   `
 
   const { data } = await getClient().query({ query, variables: { userEmail } });
   return data.users[0]?.userId;
+}
+
+export const createUserByEmail = async ({ userEmail }: UserUniqueKey) => {
+  const mutation = gql`
+    mutation MutateUser($userEmail: String!) {
+        mutateUser(userEmail: $userEmail) {
+            user {
+                userId
+            }
+        }
+    }
+  `
+
+  const { data } = await getClient().mutate({ mutation, variables: { userEmail } })
+  return data.mutateUser.user.userId;
 }
