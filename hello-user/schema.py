@@ -20,8 +20,12 @@ class UserMasterMutation(graphene.Mutation):
     user = graphene.Field(lambda: UserMaster)
 
     def mutate(self, info, user_email):
-        user = UserMasterModel(user_id=uuid.uuid4(), user_email=user_email)
-        user.save()
+        user = db_session.query(UserMasterModel).filter_by(user_email=user_email).first()
+        if user is None:
+            user = UserMasterModel(user_id=uuid.uuid4(), user_email=user_email)
+            user.save()
+        else:
+            raise Exception('Email already exists')
 
         return UserMasterMutation(user=user)
 

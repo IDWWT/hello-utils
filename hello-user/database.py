@@ -20,7 +20,6 @@ def init_db():
 
     # Create the fixtures
     admin = UserRole(role_code="ADMIN", role_name="관리자", can_edit_post_yn="Y", can_delete_post_yn="Y")
-    print(admin)
     db_session.add(admin)
     normal = UserRole(role_code="NORMAL", role_name="일반 사용자", can_edit_post_yn="Y", can_delete_post_yn="N")
     db_session.add(normal)
