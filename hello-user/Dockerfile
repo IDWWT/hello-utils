@@ -18,7 +18,8 @@ COPY --from=builder /usr/local/lib/python3.9/site-packages /usr/local/lib/python
 COPY --from=builder /app /app
 
 EXPOSE 8000
-CMD ["python3", "-m", "flask", "run", "--host=0.0.0.0"]
+# CMD ["python3", "-m", "flask", "run", "--host=0.0.0.0"]
+CMD ["python", "app.py"]
 
 # production stage
 FROM python:3.9-slim as production
@@ -31,4 +32,5 @@ COPY --from=builder /usr/local/lib/python3.9/site-packages /usr/local/lib/python
 COPY --from=builder /app /app
 
 EXPOSE 8000
-CMD ["python3", "-m", "flask", "run", "--host=0.0.0.0"]
+# CMD ["python3", "-m", "flask", "run", "--host=0.0.0.0"]
+CMD ["python", "app.py"]

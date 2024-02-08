@@ -52,6 +52,7 @@ services:
       context: ./hello-user
       dockerfile: Dockerfile
       target: development
+    restart: always
     ports:
       - 8000:5000
     develop:
@@ -82,8 +83,6 @@ services:
       ]
     volumes:
       - ./mysql/data:/var/lib/mysql
-    networks:
-      - default
 
   redis:
     container_name: hello-redis

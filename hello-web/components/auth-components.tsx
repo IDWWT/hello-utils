@@ -1,6 +1,6 @@
 import { signIn, signOut } from "@/auth"
 
-export function SignIn() {
+export function SignInButton() {
   return (
     <form
       action={async () => {
@@ -13,7 +13,7 @@ export function SignIn() {
   )
 }
 
-export function SignOut() {
+export function SignOutButton() {
   return (
     <form
       action={async () => {
