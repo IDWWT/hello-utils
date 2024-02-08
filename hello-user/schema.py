@@ -3,7 +3,6 @@ from models import UserRole as UserRoleModel, UserMaster as UserMasterModel
 import graphene
 from graphene_sqlalchemy import SQLAlchemyObjectType
 from database import db_session
-import uuid
 
 class UserRole(SQLAlchemyObjectType):
     # 내부 클래스로서, 모델과 GraphQL 객체 사이의 매핑 및 추가 설정을 정의하는 데 사용
@@ -25,7 +24,7 @@ class UserMasterMutation(graphene.Mutation):
     def mutate(self, info, user_email):
         user = db_session.query(UserMasterModel).filter_by(user_email=user_email).first()
         if user is None:
-            user = UserMasterModel(user_id=uuid.uuid4(), user_email=user_email)
+            user = UserMasterModel(user_email=user_email)
             user.save()
         else:
             raise Exception('Email already exists')
