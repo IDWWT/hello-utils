@@ -2,6 +2,8 @@ from operator import and_
 from models import UserRole as UserRoleModel, UserMaster as UserMasterModel
 import graphene
 from graphene_sqlalchemy import SQLAlchemyObjectType
+from database import db_session
+import uuid
 
 class UserRole(SQLAlchemyObjectType):
     class Meta:
@@ -10,7 +12,21 @@ class UserRole(SQLAlchemyObjectType):
 class UserMaster(SQLAlchemyObjectType):
     class Meta:
         model = UserMasterModel
+
+class UserMasterMutation(graphene.Mutation):
+    class Arguments:
+        user_email = graphene.String(required=True)
     
+    user = graphene.Field(lambda: UserMaster)
+
+    def mutate(self, info, user_email):
+        user = UserMasterModel(user_id=uuid.uuid4(), user_email=user_email)
+
+        db_session.add(user)
+        db_session.commit()
+
+        return UserMasterMutation(user=user)
+
 class Query(graphene.ObjectType):
     users = graphene.List(
         UserMaster,
@@ -28,5 +44,7 @@ class Query(graphene.ObjectType):
 
         return query.all()
 
+class Mutation(graphene.ObjectType):
+    mutate_user = UserMasterMutation.Field()
 
-schema = graphene.Schema(query=Query)
+schema = graphene.Schema(query=Query, mutation=Mutation)

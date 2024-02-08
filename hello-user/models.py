@@ -3,7 +3,6 @@ from database import Base
 from sqlalchemy import Column, DateTime, ForeignKey, String, Enum
 from sqlalchemy.sql import func
 from sqlalchemy.orm import backref, relationship
-import uuid
 
 class YN(enum.Enum):
     Y = 'Y'
@@ -22,7 +21,7 @@ class UserRole(Base):
 
 class UserMaster(Base):
     __tablename__ = "user_master"
-    user_id = Column(String(36), primary_key=True, default=uuid.uuid4())
+    user_id = Column(String(36), primary_key=True)
     user_email = Column(String(320), nullable=False, unique=True)
     role_code = Column(String(30), ForeignKey("user_role.role_code"), nullable=False, default="NORMAL")
     social_id = Column(String(255))
