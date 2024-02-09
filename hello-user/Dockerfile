@@ -25,8 +25,10 @@ RUN apt-get update && apt-get install -y apt-transport-https ca-certificates cur
     apt-get -y install doppler
 
 EXPOSE 8000
+
 ENTRYPOINT ["doppler", "run", "--"]
-CMD ["python3", "-m", "flask", "run", "--host=0.0.0.0"]
+# CMD ["python3", "-m", "flask", "run", "--host=0.0.0.0"]
+CMD ["python", "app.py"]
 
 # production stage
 FROM python:3.9-slim as production
@@ -46,5 +48,7 @@ RUN apt-get update && apt-get install -y apt-transport-https ca-certificates cur
     apt-get -y install doppler
 
 EXPOSE 8000
+
 ENTRYPOINT ["doppler", "run", "--"]
-CMD ["python3", "-m", "flask", "run", "--host=0.0.0.0"]
+# CMD ["python3", "-m", "flask", "run", "--host=0.0.0.0"]
+CMD ["python", "app.py"]
