@@ -58,6 +58,8 @@ services:
       target: development
     ports:
       - 8000:5000
+    environment:
+      - DOPPLER_TOKEN=${DOPPLER_TOKEN_HELLO_USER}
     develop:
       watch:
         - action: sync
