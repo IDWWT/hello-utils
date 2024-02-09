@@ -10,6 +10,8 @@ services:
     ports:
       - 13020:8080 # application port
       - 13021:8000 # debugger port
+    environment:
+      - DOPPLER_TOKEN=${DOPPLER_TOKEN_HELLO_CODE}
     develop:
       watch:
         - action: rebuild
@@ -30,6 +32,8 @@ services:
       target: development
     ports:
       - 13010:3000
+    environment:
+      - DOPPLER_TOKEN=${DOPPLER_TOKEN_HELLO_WEB}
     develop:
       watch:
         - action: sync
@@ -55,6 +59,8 @@ services:
     restart: always
     ports:
       - 8000:5000
+    environment:
+      - DOPPLER_TOKEN=${DOPPLER_TOKEN_HELLO_USER}
     develop:
       watch:
         - action: sync
@@ -69,10 +75,10 @@ services:
     container_name: hello-db
     image: mysql:latest
     environment:
-      MYSQL_ROOT_PASSWORD: root1234
-      MYSQL_DATABASE: hello_util
-      MYSQL_USER: local_user
-      MYSQL_PASSWORD: user1234
+      - MYSQL_ROOT_PASSWORD
+      - MYSQL_DATABASE
+      - MYSQL_USER
+      - MYSQL_PASSWORD
     ports:
       - "13001:3306"
     command:
