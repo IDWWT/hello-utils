@@ -10,6 +10,8 @@ services:
     ports:
       - 13020:8080 # application port
       - 13021:8000 # debugger port
+    environment:
+      - DOPPLER_TOKEN=${DOPPLER_TOKEN_HELLO_CODE}
     develop:
       watch:
         - action: rebuild
