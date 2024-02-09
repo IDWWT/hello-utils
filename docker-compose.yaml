@@ -74,10 +74,10 @@ services:
     container_name: hello-db
     image: mysql:latest
     environment:
-      MYSQL_ROOT_PASSWORD: root1234
-      MYSQL_DATABASE: hello_util
-      MYSQL_USER: local_user
-      MYSQL_PASSWORD: user1234
+      - MYSQL_ROOT_PASSWORD
+      - MYSQL_DATABASE
+      - MYSQL_USER
+      - MYSQL_PASSWORD
     ports:
       - "13001:3306"
     command:
