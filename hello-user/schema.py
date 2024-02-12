@@ -37,6 +37,8 @@ class Query(graphene.ObjectType):
         user_id=graphene.String(required=False),
         user_email=graphene.String(required=False),
         role_code=graphene.String(required=False),
+        sort_by=graphene.String(required=False),
+        sort_order=graphene.String(required=False),
     )
 
     def resolve_users(self, info, **kwargs):
@@ -51,6 +53,15 @@ class Query(graphene.ObjectType):
 
         if kwargs.get("role_code"):
             query = query.filter(UserMasterModel.role_code == kwargs.get("role_code"))
+        
+        # 정렬
+        if kwargs.get("sort_by"):
+            sort_by = kwargs.get("sort_by")
+            sort_order = kwargs.get("sort_order", "asc")  # 기본적으로 오름차순
+            if sort_order == "asc":
+                query = query.order_by(getattr(UserMasterModel, sort_by).asc())
+            elif sort_order == "desc":
+                query = query.order_by(getattr(UserMasterModel, sort_by).desc())
 
 
         return query.all()
