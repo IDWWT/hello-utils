@@ -14,8 +14,7 @@ docker-compose down
 docker compose logs -f <service-name>
 ```
 
-## 개발 데이터 init
-
-``` sh 
-sh migration/migrate_dev.sh
+## python API 테스트 실행
+``` sh
+docker exec -it hello-user python /app/test_graphql.py
 ```
