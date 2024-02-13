@@ -17,14 +17,15 @@ class UserMasterMutation(graphene.Mutation):
     # GraphQL Mutation의 입력 파라미터를 정의하는데 사용
     class Arguments:
         user_email = graphene.String(required=True)
+        social_id = graphene.String(required=False)
     
     # GraphQL 쿼리에서 반환될 데이터의 타입과 구조를 결정
     user = graphene.Field(UserMaster)
 
-    def mutate(self, info, user_email):
+    def mutate(self, info, user_email, social_id=None):
         user = db_session.query(UserMasterModel).filter_by(user_email=user_email).first()
         if user is None:
-            user = UserMasterModel(user_email=user_email)
+            user = UserMasterModel(user_email=user_email, social_id=social_id)
             user.save()
         else:
             raise Exception('Email already exists')

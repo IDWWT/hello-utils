@@ -80,6 +80,43 @@ def mutate_user():
         print("response :", json.dumps(response, indent=4))
         print("expect :", json.dumps(expect, indent=4))
 
+def mutate_user_with_optional_data():
+    try:
+        client = Client(my_schema)
+        variables = {
+            "userEmail": "test_user02@gmail.com",
+            "socialId": "142356679"
+        }
+        response = client.execute('''mutation MutateUser($userEmail: String!, $socialId: String) {
+            mutateUser(userEmail: $userEmail, socialId: $socialId) {
+                user {
+                    # userId 랜덤으로 생성되기 때문에 검증 불가
+                    userEmail
+                    roleCode
+                    socialId
+                }
+            }
+        }''', None, None, variables)
+        expect = {
+            "data": {
+                "mutateUser": {
+                    "user": {
+                        # "userId": "d37868e4-5533-47d5-b9dc-6fb7589e338a",
+                        "userEmail": "test_user02@gmail.com",
+                        "roleCode": "NORMAL",
+                        "socialId": "142356679",
+                    }
+                }
+            }
+        }
+        assert response == expect
+        print("\033[94m" + "test success : " + inspect.currentframe().f_code.co_name + "\033[0m")
+    except:
+        print("\033[91m" + "test failed : " + inspect.currentframe().f_code.co_name + "\033[0m")
+        print("response :", json.dumps(response, indent=4))
+        print("expect :", json.dumps(expect, indent=4))
+
 
 users()
 mutate_user()
+mutate_user_with_optional_data()
