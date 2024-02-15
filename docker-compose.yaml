@@ -89,6 +89,7 @@ services:
       ]
     volumes:
       - ./mysql/data:/var/lib/mysql
+    user: mysql
 
   redis:
     container_name: hello-redis
