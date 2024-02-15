@@ -99,6 +99,20 @@ services:
       - "13002:6379"
     command: redis-server
 
+  nginx:
+    container_name: hello-nginx
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile
+    ports:
+      - 80:80
+    # depends_on:
+    #   - fe-web
+    develop:
+      watch:
+        - action: sync+restart
+          path: ./nginx/config/nginx.conf
+
 networks:
   default:
     name: hell-network
