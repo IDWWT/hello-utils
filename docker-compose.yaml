@@ -89,7 +89,7 @@ services:
         "--collation-server=utf8mb4_bin"
       ]
     volumes:
-      - ./mysql/data:/var/lib/mysql:rw
+      - ./mysql/data:/var/lib/mysql
     user: mysql
 
   redis:
