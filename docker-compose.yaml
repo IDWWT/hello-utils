@@ -89,7 +89,8 @@ services:
         "--collation-server=utf8mb4_bin"
       ]
     volumes:
-      - ./mysql/data:/var/lib/mysql
+      - ./mysql/data:/var/lib/mysql:rw
+    user: mysql
 
   redis:
     container_name: hello-redis
