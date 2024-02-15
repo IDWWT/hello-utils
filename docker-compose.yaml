@@ -7,6 +7,7 @@ services:
       context: ./hello-code
       dockerfile: Dockerfile
       target: development
+    restart: always
     ports:
       - 13020:8080 # application port
       - 13021:8000 # debugger port
