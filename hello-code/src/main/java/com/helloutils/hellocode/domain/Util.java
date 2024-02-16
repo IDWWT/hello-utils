@@ -17,7 +17,7 @@ public class Util {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long utilId;
 
     @Column
     private String title;
