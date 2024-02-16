@@ -33,7 +33,7 @@ def users():
                     },
                     {
                         "userId": f"{user_id_02}",
-                        "userEmail": "normal_user_02@hello.com"
+                        "userEmail": "normal_user_02@hello.co"
                     }
                 ]
             }
@@ -44,6 +44,7 @@ def users():
         print("\033[91m" + "test failed : " + inspect.currentframe().f_code.co_name + "\033[0m")
         print("response :", json.dumps(response, indent=4))
         print("expect :", json.dumps(expect, indent=4))
+        exit(1)
 
 def mutate_user():
     try:
@@ -79,6 +80,7 @@ def mutate_user():
         print("\033[91m" + "test failed : " + inspect.currentframe().f_code.co_name + "\033[0m")
         print("response :", json.dumps(response, indent=4))
         print("expect :", json.dumps(expect, indent=4))
+        exit(1)
 
 def mutate_user_with_optional_data():
     try:
@@ -115,8 +117,10 @@ def mutate_user_with_optional_data():
         print("\033[91m" + "test failed : " + inspect.currentframe().f_code.co_name + "\033[0m")
         print("response :", json.dumps(response, indent=4))
         print("expect :", json.dumps(expect, indent=4))
+        exit(1)
 
 
 users()
 mutate_user()
 mutate_user_with_optional_data()
+exit(0)
