@@ -2,11 +2,13 @@ package com.helloutils.hellocode.domain;
 
 import com.helloutils.hellocode.enums.CategoryCd;
 import com.helloutils.hellocode.enums.LanguageCd;
+import com.helloutils.hellocode.response.UtilResponse;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.data.domain.Page;
 
 import java.time.LocalDateTime;
 
@@ -52,5 +54,4 @@ public class Util {
         this.categoryCd = categoryCd;
         this.createdAt = LocalDateTime.now();
     }
-
 }

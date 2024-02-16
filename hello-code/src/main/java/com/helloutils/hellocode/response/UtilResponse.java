@@ -6,6 +6,7 @@ import com.helloutils.hellocode.enums.LanguageCd;
 import lombok.Builder;
 import lombok.Getter;
 import org.springframework.cglib.core.Local;
+import org.springframework.data.domain.Page;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -33,13 +34,15 @@ public class UtilResponse {
     }
 
     @Builder
-    public UtilResponse(Long utilId,
-                        String title,
-                        String description,
-                        String code, Long userId,
-                        LanguageCd languageCd,
-                        CategoryCd categoryCd,
-                        LocalDateTime createdAt) {
+    public UtilResponse(
+        Long utilId,
+        String title,
+        String description,
+        String code, Long userId,
+        LanguageCd languageCd,
+        CategoryCd categoryCd,
+        LocalDateTime createdAt
+    ) {
         this.utilId = utilId;
         this.title = title;
         this.description = description;
