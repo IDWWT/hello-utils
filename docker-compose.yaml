@@ -7,7 +7,11 @@ services:
       context: ./hello-code
       dockerfile: Dockerfile
       target: development
-    restart: always
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
     ports:
       - 13020:8080 # application port
       - 13021:8000 # debugger port
@@ -31,6 +35,11 @@ services:
       context: ./hello-web
       dockerfile: Dockerfile
       target: development
+    depends_on:
+      hello-code:
+        condition: service_started
+      hello-user:
+        condition: service_started
     ports:
       - 13010:3000
     environment:
@@ -57,7 +66,11 @@ services:
       context: ./hello-user
       dockerfile: Dockerfile
       target: development
-    restart: always
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
     ports:
       - 8000:5000
     environment:
@@ -75,7 +88,13 @@ services:
   mysql:
     container_name: hello-db
     image: mysql:latest
+    restart: always
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "$MYSQL_USER", "-p$MYSQL_PASSWORD"]
+      timeout: 20s
+      retries: 10
     environment:
+      - MYSQL_ALLOW_EMPTY_PASSWORD
       - MYSQL_ROOT_PASSWORD
       - MYSQL_DATABASE
       - MYSQL_USER
@@ -89,15 +108,38 @@ services:
         "--collation-server=utf8mb4_bin"
       ]
     volumes:
-      - ./mysql/data:/var/lib/mysql:rw
+      - ./mysql/data:/var/lib/mysql
     user: mysql
 
   redis:
     container_name: hello-redis
     image: redis:latest
+    healthcheck:
+      test: [ "CMD", "redis-cli", "--raw", "incr", "ping" ]
+      timeout: 20s
+      retries: 10
     ports:
       - "13002:6379"
     command: redis-server
+
+  nginx:
+    container_name: hello-nginx
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile
+    depends_on:
+      hello-code:
+        condition: service_started
+      hello-web:
+        condition: service_started
+      hello-user:
+        condition: service_started
+    ports:
+      - 80:80
+    develop:
+      watch:
+        - action: sync+restart
+          path: ./nginx/config/nginx.conf
 
 networks:
   default:
