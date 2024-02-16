@@ -10,5 +10,4 @@ import java.util.List;
 
 public interface UtilRepository extends JpaRepository<Util, Long> {
     Page<Util> findAllByOrderByCreatedAtDesc(Pageable pageable);
-
 }

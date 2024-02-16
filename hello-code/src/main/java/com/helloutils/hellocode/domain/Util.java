@@ -1,14 +1,13 @@
 package com.helloutils.hellocode.domain;
 
 import com.helloutils.hellocode.enums.CategoryCd;
+import com.helloutils.hellocode.enums.DeleteYn;
 import com.helloutils.hellocode.enums.LanguageCd;
-import com.helloutils.hellocode.response.UtilResponse;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.data.domain.Page;
 
 import java.time.LocalDateTime;
 
@@ -39,6 +38,9 @@ public class Util {
 
     private LocalDateTime createdAt;
 
+    @Enumerated(EnumType.STRING)
+    private DeleteYn deleteYn;
+
     @Builder
     public Util(String title,
                 String description,
@@ -53,5 +55,9 @@ public class Util {
         this.languageCd = languageCd;
         this.categoryCd = categoryCd;
         this.createdAt = LocalDateTime.now();
+    }
+
+    public void delete(DeleteYn deleteYn) {
+        this.deleteYn = deleteYn;
     }
 }

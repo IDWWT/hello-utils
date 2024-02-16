@@ -22,6 +22,10 @@ public class UtilResponse {
     private final CategoryCd categoryCd;
     private final LocalDateTime createdAt;
 
+    static public UtilResponse convertToResponse(Util util) {
+        return new UtilResponse(util);
+    }
+
     public UtilResponse(Util util) {
         this.utilId = util.getUtilId();
         this.title = util.getTitle();

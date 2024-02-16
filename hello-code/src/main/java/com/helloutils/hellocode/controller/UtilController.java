@@ -31,8 +31,13 @@ public class UtilController {
         return utilService.getList(page, size);
     }
 
-    @PostMapping("/utils")
+    @PostMapping("/util")
     public void post(@RequestBody UtilCreate request) {
         utilService.write(request);
+    }
+
+    @DeleteMapping("/utils/{utilId}")
+    public void delete(@PathVariable("utilId") Long utilId) {
+        utilService.delete(utilId);
     }
 }

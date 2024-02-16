@@ -1,19 +1,19 @@
 package com.helloutils.hellocode.service;
 
 import com.helloutils.hellocode.domain.Util;
+import com.helloutils.hellocode.enums.DeleteYn;
 import com.helloutils.hellocode.pagination.PageInfo;
 import com.helloutils.hellocode.repository.UtilRepository;
 import com.helloutils.hellocode.request.UtilCreate;
 import com.helloutils.hellocode.response.UtilResponse;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import com.helloutils.hellocode.exception.UtilNotFound;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -66,9 +66,9 @@ public class UtilService {
         return utilList.stream()
                 .map(this::convertToResponse)
                 .collect(Collectors.toList());
-
     }
 
+    //entity -> dto
     private UtilResponse convertToResponse(Util util) {
         return UtilResponse.builder()
                 .utilId(util.getUtilId())
@@ -80,6 +80,15 @@ public class UtilService {
                 .userId(util.getUserId())
                 .createdAt(util.getCreatedAt())
                 .build();
+    }
+
+    @Transactional
+    public void delete(Long utilId) {
+        Util util = utilRepository.findById(utilId)
+                .orElseThrow(UtilNotFound::new);
+
+        // 삭제
+        util.delete(DeleteYn.Y);
     }
 
 }
