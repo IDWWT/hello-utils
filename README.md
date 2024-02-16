@@ -21,6 +21,23 @@
     doppler login
     ```
 
+### Nginx
+
+1. `/etc/hosts` 파일 열기
+
+    ```sh
+    sudo vi /etc/hosts
+    ```
+
+2. 다음 설정을 복사 붙여넣기
+
+    ```sh
+    # hello-utils
+    127.0.0.1 web.hello-utils.wiki
+    127.0.0.1 code.hello-utils.wiki
+    127.0.0.1 user.hello-utils.wiki
+    ```
+
 ## 실행방법
 
 ```sh
