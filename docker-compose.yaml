@@ -13,17 +13,17 @@ services:
       - 13021:8000 # debugger port
     environment:
       - DOPPLER_TOKEN=${DOPPLER_TOKEN_HELLO_CODE}
-    develop:
-      watch:
-        - action: rebuild
-          path: ./hello-code/src
-          target: /app/src
-        - action: rebuild
-          path: ./hello-code/gradle
-        - action: rebuild
-          path: ./hello-code/build.gradle
-        - action: rebuild
-          path: ./hello-code/settings.gradle
+    # develop:
+    #   watch:
+        # - action: rebuild
+        #   path: ./hello-code/src
+        #   target: /app/src
+        # - action: rebuild
+        #   path: ./hello-code/gradle
+        # - action: rebuild
+        #   path: ./hello-code/build.gradle
+        # - action: rebuild
+        #   path: ./hello-code/settings.gradle
 
   hello-web:
     container_name: hello-web

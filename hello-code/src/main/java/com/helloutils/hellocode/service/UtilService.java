@@ -2,6 +2,7 @@ package com.helloutils.hellocode.service;
 
 import com.helloutils.hellocode.domain.Util;
 import com.helloutils.hellocode.repository.UtilRepository;
+import com.helloutils.hellocode.request.UtilCreate;
 import com.helloutils.hellocode.response.UtilResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -13,6 +14,18 @@ import com.helloutils.hellocode.exception.UtilNotFound;
 @RequiredArgsConstructor
 public class UtilService {
     private final UtilRepository utilRepository;
+
+    public void write(UtilCreate utilCreate) {
+        Util util = Util.builder()
+                .userId(utilCreate.getUserId())
+                .title(utilCreate.getTitle())
+                .description(utilCreate.getDescription())
+                .code(utilCreate.getCode())
+                .languageCd(utilCreate.getLanguageCd())
+                .categoryCd(utilCreate.getCategoryCd())
+                .build();
+        utilRepository.save(util);
+    }
 
     public UtilResponse get(Long id) {
         Util util = utilRepository.findById(id)
