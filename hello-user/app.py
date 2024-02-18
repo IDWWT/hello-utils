@@ -11,6 +11,15 @@ CORS(app)
 def home():
     return "Hello, World!"
 
+@app.route("/health")
+def health():
+    try:
+        is_db_healthy = db_session.execute("SELECT 1 AS healthy FROM DUAL").fetchone()["healthy"];
+        response = { "healthy": is_db_healthy };
+    except:
+        response = { "healthy": 0 };
+    return response
+
 app.add_url_rule(
     '/graphql',
     view_func=GraphQLView.as_view(
