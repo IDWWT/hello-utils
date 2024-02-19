@@ -1,10 +1,12 @@
 package com.helloutils.hellocode.service;
 
 import com.helloutils.hellocode.domain.Util;
+import com.helloutils.hellocode.domain.UtilEditor;
 import com.helloutils.hellocode.enums.DeleteYn;
 import com.helloutils.hellocode.pagination.PageInfo;
 import com.helloutils.hellocode.repository.UtilRepository;
 import com.helloutils.hellocode.request.UtilCreate;
+import com.helloutils.hellocode.request.UtilEdit;
 import com.helloutils.hellocode.response.UtilResponse;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -89,6 +91,24 @@ public class UtilService {
 
         // 삭제
         util.delete(DeleteYn.Y);
+    }
+
+    @Transactional
+    public void edit(Long utilId, UtilEdit utilEdit) {
+        Util util = utilRepository.findById(utilId)
+                .orElseThrow(UtilNotFound::new);
+
+        UtilEditor.UtilEditorBuilder utilEditorBuilder = util.toEditor();
+
+        UtilEditor utilEditor = utilEditorBuilder
+                .title(utilEdit.getTitle())
+                .description(utilEdit.getDescription())
+                .code(utilEdit.getCode())
+                .languageCd(utilEdit.getLanguageCd())
+                .categoryCd(utilEdit.getCategoryCd())
+                .build();
+
+        util.edit(utilEditor);
     }
 
 }

@@ -60,4 +60,21 @@ public class Util {
     public void delete(DeleteYn deleteYn) {
         this.deleteYn = deleteYn;
     }
+
+    public UtilEditor.UtilEditorBuilder toEditor() {
+        return UtilEditor.builder()
+                .title(title)
+                .description(description)
+                .code(code)
+                .languageCd(languageCd)
+                .categoryCd(categoryCd);
+    }
+
+    public void edit(UtilEditor utilEditor) {
+        title = utilEditor.getTitle();
+        description = utilEditor.getDescription();
+        code = utilEditor.getCode();
+        languageCd = utilEditor.getLanguageCd();
+        categoryCd = utilEditor.getCategoryCd();
+    }
 }

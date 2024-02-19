@@ -2,8 +2,10 @@ package com.helloutils.hellocode.controller;
 
 import com.helloutils.hellocode.domain.Util;
 import com.helloutils.hellocode.request.UtilCreate;
+import com.helloutils.hellocode.request.UtilEdit;
 import com.helloutils.hellocode.response.UtilResponse;
 import com.helloutils.hellocode.service.UtilService;
+import jakarta.validation.Valid;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -35,6 +37,12 @@ public class UtilController {
     public void post(@RequestBody UtilCreate request) {
         utilService.write(request);
     }
+
+    @PatchMapping("/util/{utilId}")
+    public void edit(@PathVariable("utilId") Long utilId, @RequestBody @Valid UtilEdit utilEdit) {
+        utilService.edit(utilId, utilEdit);
+    }
+
 
     @DeleteMapping("/utils/{utilId}")
     public void delete(@PathVariable("utilId") Long utilId) {
