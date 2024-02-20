@@ -29,6 +29,20 @@ export const getUserIdByEmail = async ({ userEmail }: UserUniqueKey) => {
   return data.users[0]?.userId;
 }
 
+export const getUserForSessionByEmail = async ({ userEmail }: UserUniqueKey) => {
+  const query = gql`
+    query Users($userEmail: String!) {
+        users(userEmail: $userEmail) {
+            userId
+            roleCode
+        }
+    }
+  `
+
+  const { data } = await getClient().query({ query, variables: { userEmail } });
+  return data.users[0];
+}
+
 export const createUserByEmail = async ({ userEmail }: UserUniqueKey) => {
   const mutation = gql`
     mutation MutateUser($userEmail: String!) {
