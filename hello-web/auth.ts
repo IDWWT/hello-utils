@@ -3,6 +3,7 @@ import NextAuth from "next-auth"
 import GitHub from "next-auth/providers/github"
 
 import type { NextAuthConfig } from 'next-auth';
+import { getUserForSessionByEmail } from "./utils/graphql";
 
 export const config = {
   theme: {
@@ -14,6 +15,15 @@ export const config = {
       const { pathname } = request.nextUrl
       if (pathname === "/middleware-example") return !!auth
       return true
+    },
+    async session({ session }) {
+      // Add custom data to the session
+      if (session.user) {
+        const { userId, roleCode } = await getUserForSessionByEmail({ userEmail: session.user.email! });
+        session.user.userId = userId;
+        session.user.isAdmin = roleCode === 'ADMIN';
+      }
+      return session;
     },
   },
 } satisfies NextAuthConfig
