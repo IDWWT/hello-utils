@@ -18,16 +18,16 @@ services:
     env_file:
       - ./hello-code/.env
     develop:
-      watch:
-        - action: rebuild
-          path: ./hello-code/src
-          target: /app/src
-        - action: rebuild
-          path: ./hello-code/gradle
-        - action: rebuild
-          path: ./hello-code/build.gradle
-        - action: rebuild
-          path: ./hello-code/settings.gradle
+       watch:
+         - action: rebuild
+           path: ./hello-code/src
+           target: /app/src
+         - action: rebuild
+           path: ./hello-code/gradle
+         - action: rebuild
+           path: ./hello-code/build.gradle
+         - action: rebuild
+           path: ./hello-code/settings.gradle
 
   hello-web:
     container_name: hello-web

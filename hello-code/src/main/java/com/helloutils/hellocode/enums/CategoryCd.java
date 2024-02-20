@@ -6,6 +6,6 @@ import lombok.RequiredArgsConstructor;
 import java.util.Arrays;
 
 public enum CategoryCd {
-    OK,
-    CALCULATE
+    REGEX,
+    FORMAT
 }

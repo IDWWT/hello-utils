@@ -1,6 +1,7 @@
 package com.helloutils.hellocode.domain;
 
 import com.helloutils.hellocode.enums.CategoryCd;
+import com.helloutils.hellocode.enums.DeleteYn;
 import com.helloutils.hellocode.enums.LanguageCd;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -17,7 +18,7 @@ public class Util {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long utilId;
 
     @Column
     private String title;
@@ -37,6 +38,9 @@ public class Util {
 
     private LocalDateTime createdAt;
 
+    @Enumerated(EnumType.STRING)
+    private DeleteYn deleteYn;
+
     @Builder
     public Util(String title,
                 String description,
@@ -53,4 +57,24 @@ public class Util {
         this.createdAt = LocalDateTime.now();
     }
 
+    public void delete(DeleteYn deleteYn) {
+        this.deleteYn = deleteYn;
+    }
+
+    public UtilEditor.UtilEditorBuilder toEditor() {
+        return UtilEditor.builder()
+                .title(title)
+                .description(description)
+                .code(code)
+                .languageCd(languageCd)
+                .categoryCd(categoryCd);
+    }
+
+    public void edit(UtilEditor utilEditor) {
+        title = utilEditor.getTitle();
+        description = utilEditor.getDescription();
+        code = utilEditor.getCode();
+        languageCd = utilEditor.getLanguageCd();
+        categoryCd = utilEditor.getCategoryCd();
+    }
 }
