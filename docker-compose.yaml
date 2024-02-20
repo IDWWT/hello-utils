@@ -15,8 +15,8 @@ services:
     ports:
       - 13020:8080 # application port
       - 13021:8000 # debugger port
-    environment:
-      - DOPPLER_TOKEN=${DOPPLER_TOKEN_HELLO_CODE}
+    env_file:
+      - ./hello-code/.env
     develop:
        watch:
          - action: rebuild
@@ -42,8 +42,8 @@ services:
         condition: service_started
     ports:
       - 13010:3000
-    environment:
-      - DOPPLER_TOKEN=${DOPPLER_TOKEN_HELLO_WEB}
+    env_file:
+      - ./hello-web/.env
     develop:
       watch:
         - action: sync
@@ -73,8 +73,8 @@ services:
         condition: service_healthy
     ports:
       - 8000:5000
-    environment:
-      - DOPPLER_TOKEN=${DOPPLER_TOKEN_HELLO_USER}
+    env_file:
+      - ./hello-user/.env
     develop:
       watch:
         - action: sync
@@ -91,14 +91,12 @@ services:
     restart: always
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "$MYSQL_USER", "-p$MYSQL_PASSWORD"]
-      timeout: 20s
-      retries: 10
-    environment:
-      - MYSQL_ALLOW_EMPTY_PASSWORD
-      - MYSQL_ROOT_PASSWORD
-      - MYSQL_DATABASE
-      - MYSQL_USER
-      - MYSQL_PASSWORD
+      interval: 5s
+      timeout: 3s
+      start_period: 0s
+      retries: 6
+    env_file:
+      - ./mysql/.env
     ports:
       - "13001:3306"
     command:
@@ -116,8 +114,10 @@ services:
     image: redis:latest
     healthcheck:
       test: [ "CMD", "redis-cli", "--raw", "incr", "ping" ]
-      timeout: 20s
-      retries: 10
+      interval: 5s
+      timeout: 3s
+      start_period: 0s
+      retries: 6
     ports:
       - "13002:6379"
     command: redis-server
