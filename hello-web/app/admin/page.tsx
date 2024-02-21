@@ -7,7 +7,7 @@ export default async function Header() {
 
   console.log(user);
   if (!user) return "Please Sign In";
-  if (!user.isAdmin) return "Not Allowed User";
+  if (user.roleCode !== "ADMIN") return "Not Allowed User";
 
   return (
     <div>

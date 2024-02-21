@@ -3,7 +3,7 @@ import NextAuth from "next-auth"
 import GitHub from "next-auth/providers/github"
 
 import type { NextAuthConfig } from 'next-auth';
-import { getUserForSessionByEmail } from "./utils/graphql";
+import { getUserSessionByEmail } from "./utils/graphql";
 
 export const config = {
   theme: {
@@ -18,10 +18,14 @@ export const config = {
     },
     async session({ session }) {
       // Add custom data to the session
-      if (session.user) {
-        const { userId, roleCode } = await getUserForSessionByEmail({ userEmail: session.user.email! });
-        session.user.userId = userId;
-        session.user.isAdmin = roleCode === 'ADMIN';
+      if (!session.user) return session;
+
+      const userSession = await getUserSessionByEmail({ userEmail: session.user.email! });
+      if (!userSession) return session;
+
+      session.user = {
+        ...session.user,
+        ...userSession
       }
       return session;
     },

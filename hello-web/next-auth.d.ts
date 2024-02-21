@@ -1,10 +1,8 @@
 import { DefaultSession } from "next-auth"
+import { UserSession } from "./models/user.model"
  
 declare module "next-auth" {
   interface Session {
-    user: {
-      userId: string;
-      isAdmin: boolean;
-    } & DefaultSession["user"]
+    user: UserSession & DefaultSession["user"]
   }
 }
