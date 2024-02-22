@@ -1,7 +1,7 @@
 import { ApolloClient, HttpLink, InMemoryCache } from "@apollo/client";
 import { registerApolloClient } from "@apollo/experimental-nextjs-app-support/rsc";
 import { gql } from "@apollo/client";
-import { UserUniqueKey } from "@/utils/user"
+import { UserSearchCondition, UserUniqueKey } from "@/types/user"
 import { UserSession } from "@/models/user.model";
 
 export const { getClient } = registerApolloClient(() => {
@@ -61,6 +61,57 @@ export const getUserSessionByEmail = async ({ userEmail }: UserUniqueKey): Promi
 
   const { data } = await getClient().query({ query, variables: { userEmail } });
   return data.users.edges[0]?.node;
+}
+
+export const getUserList = async ({ first, after }: UserSearchCondition) => {
+  const query = gql`
+    query Users($first: Int!, $after: String) {
+        users(first: $first, after: $after) {
+            totalCount
+            edges {
+                node {
+                    userId
+                    userEmail
+                    roleCode
+                    socialId
+                    createdAt
+                    updatedAt
+                    id
+                }
+            }
+            pageCursors {
+                around {
+                    cursor
+                    isCurrent
+                    page
+                }
+                first {
+                    cursor
+                    isCurrent
+                    page
+                }
+                last {
+                    cursor
+                    isCurrent
+                    page
+                }
+                next {
+                    cursor
+                    isCurrent
+                    page
+                }
+                previous {
+                    cursor
+                    isCurrent
+                    page
+                }
+            }
+        }
+    }
+  `
+
+  const { data } = await getClient().query({ query, variables: { first, after } });
+  return data;
 }
 
 export const createUserByEmail = async ({ userEmail }: UserUniqueKey) => {
