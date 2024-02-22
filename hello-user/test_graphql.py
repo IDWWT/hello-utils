@@ -33,7 +33,7 @@ def users():
                     },
                     {
                         "userId": f"{user_id_02}",
-                        "userEmail": "normal_user_02@hello.co"
+                        "userEmail": "normal_user_02@hello.com"
                     }
                 ]
             }
