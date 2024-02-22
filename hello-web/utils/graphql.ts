@@ -20,38 +20,47 @@ export const { getClient } = registerApolloClient(() => {
 export const getUserIdByEmail = async ({ userEmail }: UserUniqueKey) => {
   const query = gql`
     query Users($userEmail: String!) {
-        users(userEmail: $userEmail) {
-            userId
-        }
-    }
-  `
-
-  const { data } = await getClient().query({ query, variables: { userEmail } });
-  return data.users[0]?.userId;
-}
-
-export const getUserSessionByEmail = async ({ userEmail }: UserUniqueKey): Promise<UserSession> => {
-  const query = gql`
-    query Users($userEmail: String!) {
-        users(userEmail: $userEmail) {
-            userId
-            userEmail
-            roleCode
-            socialId
-            createdAt
-            updatedAt
-            userRole {
-                roleCode
-                roleName
-                canEditPostYn
-                canDeletePostYn
+        users(first: 1, userEmail: $userEmail) {
+            totalCount
+            edges {
+                node {
+                    userId
+                }
             }
         }
     }
   `
 
   const { data } = await getClient().query({ query, variables: { userEmail } });
-  return data.users[0];
+  return data.users.edges[0]?.node?.userId;
+}
+
+export const getUserSessionByEmail = async ({ userEmail }: UserUniqueKey): Promise<UserSession> => {
+  const query = gql`
+    query Users($userEmail: String!) {
+        users(first: 1, userEmail: $userEmail) {
+            edges {
+                node {
+                    userId
+                    userEmail
+                    roleCode
+                    socialId
+                    createdAt
+                    updatedAt
+                    userRole {
+                        roleCode
+                        roleName
+                        canEditPostYn
+                        canDeletePostYn
+                    }
+                }
+            }
+        }
+    }
+  `
+
+  const { data } = await getClient().query({ query, variables: { userEmail } });
+  return data.users.edges[0]?.node;
 }
 
 export const createUserByEmail = async ({ userEmail }: UserUniqueKey) => {
