@@ -26,3 +26,7 @@ export type User = {
 export type UserSession = User & {
   userRole: Omit<UserRole, 'createdAt' | 'updatedAt'>
 }
+
+export type UserWithRole = {
+  userRole: Omit<UserRole, 'createdAt' | 'updatedAt'>
+} & User;
