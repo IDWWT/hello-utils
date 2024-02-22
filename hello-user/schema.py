@@ -1,13 +1,9 @@
 from operator import and_
-from models import UserRole as UserRoleModel, UserMaster as UserMasterModel
+from models import UserMaster as UserMasterModel
 import graphene
 from graphene_sqlalchemy import SQLAlchemyObjectType
 from database import db_session
 
-class UserRole(SQLAlchemyObjectType):
-    # 내부 클래스로서, 모델과 GraphQL 객체 사이의 매핑 및 추가 설정을 정의하는 데 사용
-    class Meta:
-        model = UserRoleModel
 
 class UserMaster(SQLAlchemyObjectType):
     class Meta:
