@@ -1,15 +1,23 @@
 from operator import and_
-from models import UserMaster as UserMasterModel
+from models import UserMaster as UserMasterModel, UserRole as UserRoleModel
 import graphene
 from graphene_sqlalchemy import SQLAlchemyObjectType, SQLAlchemyConnectionField
 from database import db_session
 from relay_pagination.fields import PageConnection, PageConnectionField
+
+
+class UserRole(SQLAlchemyObjectType):
+    # 내부 클래스로서, 모델과 GraphQL 객체 사이의 매핑 및 추가 설정을 정의하는 데 사용
+    class Meta:
+        model = UserRoleModel
 
 class UserMaster(SQLAlchemyObjectType):
     class Meta:
         model = UserMasterModel
         interfaces = (graphene.relay.Node,)
         connection_class = PageConnection
+
+    user_role = graphene.Field(UserRole)
 
 class UserMasterMutation(graphene.Mutation):
     # GraphQL Mutation의 입력 파라미터를 정의하는데 사용
