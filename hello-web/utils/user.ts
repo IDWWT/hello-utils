@@ -1,14 +1,8 @@
 import RDSConnection from "./rds";
 import { Connection, RowDataPacket } from "mysql2/promise";
 import RedisConnection from "./redis";
+import { UserAccessToken } from "@/types/user";
 
-export type UserUniqueKey = {
-  userEmail: string;
-};
-export type UserAccessToken = {
-  userId: string;
-  accessToken: string;
-}
 
 export const setAccessToken = async ({ userId, accessToken }: UserAccessToken) => {
   return RedisConnection.redisExecutor(async (redisClient) => {
