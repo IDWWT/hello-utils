@@ -2,7 +2,7 @@ import { ApolloClient, HttpLink, InMemoryCache } from "@apollo/client";
 import { registerApolloClient } from "@apollo/experimental-nextjs-app-support/rsc";
 import { gql } from "@apollo/client";
 import { UserSearchCondition, UserUniqueKey } from "@/types/user"
-import { UserSession } from "@/models/user.model";
+import { UserSession } from "@/types/user";
 
 export const { getClient } = registerApolloClient(() => {
   return new ApolloClient({
