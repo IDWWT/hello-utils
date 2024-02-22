@@ -2,6 +2,7 @@ import { ApolloClient, HttpLink, InMemoryCache } from "@apollo/client";
 import { registerApolloClient } from "@apollo/experimental-nextjs-app-support/rsc";
 import { gql } from "@apollo/client";
 import { UserUniqueKey } from "@/utils/user"
+import { UserSession } from "@/models/user.model";
 
 export const { getClient } = registerApolloClient(() => {
   return new ApolloClient({
@@ -27,6 +28,30 @@ export const getUserIdByEmail = async ({ userEmail }: UserUniqueKey) => {
 
   const { data } = await getClient().query({ query, variables: { userEmail } });
   return data.users[0]?.userId;
+}
+
+export const getUserSessionByEmail = async ({ userEmail }: UserUniqueKey): Promise<UserSession> => {
+  const query = gql`
+    query Users($userEmail: String!) {
+        users(userEmail: $userEmail) {
+            userId
+            userEmail
+            roleCode
+            socialId
+            createdAt
+            updatedAt
+            userRole {
+                roleCode
+                roleName
+                canEditPostYn
+                canDeletePostYn
+            }
+        }
+    }
+  `
+
+  const { data } = await getClient().query({ query, variables: { userEmail } });
+  return data.users[0];
 }
 
 export const createUserByEmail = async ({ userEmail }: UserUniqueKey) => {
