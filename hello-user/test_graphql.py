@@ -120,7 +120,7 @@ def mutate_user_with_optional_data():
         exit(1)
 
 
-users()
+# users()
 mutate_user()
 mutate_user_with_optional_data()
 exit(0)
