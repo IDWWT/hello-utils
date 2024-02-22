@@ -1,5 +1,5 @@
 import { auth } from "@/auth"
-import { getUserList } from "@/utils/graphql";
+import { getUserList } from "@/utils/user";
 
 export default async function Header() {
   const session = await auth();

@@ -3,7 +3,7 @@ import NextAuth from "next-auth"
 import GitHub from "next-auth/providers/github"
 
 import type { NextAuthConfig } from 'next-auth';
-import { getUserSessionByEmail } from "./utils/graphql";
+import { getUserSessionByEmail } from "./utils/user";
 
 export const config = {
   theme: {

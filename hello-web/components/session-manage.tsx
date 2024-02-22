@@ -2,7 +2,7 @@ import { auth } from "@/auth"
 import { SignInButton, SignOutButton } from '@/components/auth-components'
 import { setAccessToken } from "@/utils/user"
 import { cookies } from 'next/headers'
-import { getUserIdByEmail, createUserByEmail } from "@/utils/graphql";
+import { getUserIdByEmail, createUserByEmail } from "@/utils/user";
 import { UserAccessToken, UserUniqueKey } from "@/types/user";
 
 export default async function SessionManage() {
