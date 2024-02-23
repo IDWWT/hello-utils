@@ -17,7 +17,7 @@ public class UtilResponse {
     private final String title;
     private final String description;
     private final String code;
-    private final Long userId;
+    private final String userId;
     private final LanguageCd languageCd;
     private final CategoryCd categoryCd;
     private final LocalDateTime createdAt;
@@ -42,7 +42,8 @@ public class UtilResponse {
         Long utilId,
         String title,
         String description,
-        String code, Long userId,
+        String code,
+        String userId,
         LanguageCd languageCd,
         CategoryCd categoryCd,
         LocalDateTime createdAt
