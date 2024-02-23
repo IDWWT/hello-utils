@@ -28,7 +28,8 @@ public class Util {
     @Column(length = 3000)
     private String code;
 
-    private Long userId;
+    @Column(name = "user_id", length = 36)
+    private String userId;
 
     @Enumerated(EnumType.STRING)
     private LanguageCd languageCd;
@@ -45,7 +46,7 @@ public class Util {
     public Util(String title,
                 String description,
                 String code,
-                Long userId,
+                String userId,
                 LanguageCd languageCd,
                 CategoryCd categoryCd) {
         this.title = title;

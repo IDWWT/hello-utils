@@ -22,10 +22,10 @@ public class UtilCreate {
     private LanguageCd languageCd;
     private CategoryCd categoryCd;
     private LocalDateTime createdAt;
-    private Long userId;
+    private String userId;
 
     @Builder
-    public UtilCreate(String title, String description, String code, Long userId, LanguageCd languageCd, CategoryCd categoryCd) {
+    public UtilCreate(String title, String description, String code, String userId, LanguageCd languageCd, CategoryCd categoryCd) {
         this.title = title;
         this.description = description;
         this.code = code;
