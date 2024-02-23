@@ -127,6 +127,7 @@ services:
     build:
       context: ./nginx
       dockerfile: Dockerfile
+      target: development
     depends_on:
       hello-code:
         condition: service_started
@@ -136,6 +137,7 @@ services:
         condition: service_started
     ports:
       - 80:80
+      - 443:443
     develop:
       watch:
         - action: sync+restart
