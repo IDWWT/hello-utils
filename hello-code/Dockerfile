@@ -16,7 +16,7 @@ COPY --from=build /build/build/libs/hellocode-*.jar .
 
 EXPOSE 13020 13021
 
-CMD ["java", "-Djava.security.egd=file:/dev/./urandom", "-Xdebug", "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:8000", "-jar", "./hellocode-0.0.1-SNAPSHOT.jar"]
+CMD ["java", "-Djava.security.egd=file:/dev/./urandom", "-Xdebug", "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:8000", "-jar", "-Dspring.profiles.active=local", "./hellocode-0.0.1-SNAPSHOT.jar"]
 
 # production stage
 FROM openjdk:17.0-slim as production
@@ -34,4 +34,4 @@ RUN apt-get update && apt-get install -y apt-transport-https ca-certificates cur
     apt-get -y install doppler
 
 ENTRYPOINT ["doppler", "run", "--"]
-CMD ["java", "-jar", "-Djava.security.egd=file:/dev/./urandom", "-Dsun.net.inetaddr.ttl=0", "hellocode-0.0.1-SNAPSHOT.jar"]
+CMD ["java", "-jar", "-Dspring.profiles.active=prod","-Djava.security.egd=file:/dev/./urandom", "-Dsun.net.inetaddr.ttl=0", "hellocode-0.0.1-SNAPSHOT.jar"]
