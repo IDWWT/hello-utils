@@ -48,7 +48,12 @@ export const GET_USER_LIST = gql`
                     socialId
                     createdAt
                     updatedAt
-                    id
+                    userRole {
+                        roleCode
+                        roleName
+                        canEditPostYn
+                        canDeletePostYn
+                    }
                 }
             }
             pageCursors {
