@@ -1,10 +1,14 @@
-import RDSConnection from "./rds";
-import { Connection, RowDataPacket } from "mysql2/promise";
 import RedisConnection from "./redis";
-import { UserAccessToken, UserSearchCondition, UserSession, UserUniqueKey } from "@/types/user";
+import { User, UserAccessToken, UserSearchCondition, UserSession, UserUniqueKey } from "@/types/user";
 import { getClient } from "./graphql-server";
 import { CREATE_USER_BY_EMAIL, GET_USER_ID_BY_EMAIL, GET_USER_LIST, GET_USER_SESSION_BY_EMAIL } from "@/graphql/user";
 
+
+export const getAccessToken = async ({ userId }: Pick<User, 'userId'>): Promise<string | null> => {
+  return RedisConnection.redisExecutor(async (redisClient) => {
+    return await redisClient.get(`${userId}_accessToken`);
+  });
+}
 
 export const setAccessToken = async ({ userId, accessToken }: UserAccessToken) => {
   return RedisConnection.redisExecutor(async (redisClient) => {
