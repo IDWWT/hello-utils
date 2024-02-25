@@ -1,9 +1,10 @@
 import NextAuth from "next-auth"
-
 import GitHub from "next-auth/providers/github"
-
 import type { NextAuthConfig } from 'next-auth';
-import { getUserSessionByEmail } from "./utils/user";
+import { createUserByEmail, getAccessToken, getUserSessionByEmail, setAccessToken } from "./utils/user";
+import { v4 as uuidv4 } from 'uuid';
+import _ from 'lodash';
+import { UserAccessToken } from "./types/user";
 
 export const config = {
   theme: {
@@ -20,12 +21,25 @@ export const config = {
       // Add custom data to the session
       if (!session.user) return session;
 
-      const userSession = await getUserSessionByEmail({ userEmail: session.user.email! });
-      if (!userSession) return session;
+      const userEmail = session.user.email || '';
+      let userSession = await getUserSessionByEmail({ userEmail });
+      if (!userSession) {
+        await createUserByEmail({ userEmail });
+        userSession = await getUserSessionByEmail({ userEmail });
+      }
+
+      const { userId } = userSession;
+      let accessToken = await getAccessToken({ userId })
+      if (_.isNull(accessToken)) {
+        accessToken = uuidv4();
+        const userAccessToken: UserAccessToken = { userId, accessToken };
+        await setAccessToken(userAccessToken);
+      }
 
       session.user = {
         ...session.user,
-        ...userSession
+        ...userSession,
+        accessToken,
       }
       return session;
     },
