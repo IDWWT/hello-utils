@@ -18,13 +18,15 @@
     "next-auth": "^5.0.0-beta.5",
     "react": "^18",
     "react-dom": "^18",
-    "redis": "^4.6.12"
+    "redis": "^4.6.12",
+    "uuid": "^9.0.1"
   },
   "devDependencies": {
     "@types/lodash": "^4.14.202",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
+    "@types/uuid": "^9.0.8",
     "autoprefixer": "^10.4.17",
     "eslint": "^8",
     "eslint-config-next": "14.1.0",
