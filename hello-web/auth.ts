@@ -1,7 +1,7 @@
 import NextAuth from "next-auth"
 import GitHub from "next-auth/providers/github"
 import type { NextAuthConfig } from 'next-auth';
-import { createUserByEmail, getAccessToken, getUserSessionByEmail, setAccessToken } from "./utils/user";
+import { checkNotExistUserSession, createUserByEmail, getAccessToken, getUserSessionByEmail, setAccessToken } from "./utils/user";
 import { v4 as uuidv4 } from 'uuid';
 import _ from 'lodash';
 import { UserAccessToken } from "./types/user";
@@ -18,17 +18,18 @@ export const config = {
       return true
     },
     async session({ session }) {
-      // Add custom data to the session
       if (!session.user) return session;
-
-      const userEmail = session.user.email || '';
-      let userSession = await getUserSessionByEmail({ userEmail });
-      if (!userSession) {
-        await createUserByEmail({ userEmail });
-        userSession = await getUserSessionByEmail({ userEmail });
+      
+      if (checkNotExistUserSession(session)) {
+        const userEmail = session.user.email!;
+        const userSession = await getUserSessionByEmail({ userEmail }) || await createUserByEmail({ userEmail });
+        session.user = {
+          ...session.user,
+          ...userSession,
+        }
       }
 
-      const { userId } = userSession;
+      const { userId } = session.user;
       let accessToken = await getAccessToken({ userId })
       if (_.isNull(accessToken)) {
         accessToken = uuidv4();
@@ -36,11 +37,7 @@ export const config = {
         await setAccessToken(userAccessToken);
       }
 
-      session.user = {
-        ...session.user,
-        ...userSession,
-        accessToken,
-      }
+      session.user.accessToken = accessToken;
       return session;
     },
   },
