@@ -92,6 +92,17 @@ export const CREATE_USER_BY_EMAIL = gql`
         mutateUser(userEmail: $userEmail) {
             user {
                 userId
+                userEmail
+                roleCode
+                socialId
+                createdAt
+                updatedAt
+                userRole {
+                    roleCode
+                    roleName
+                    canEditPostYn
+                    canDeletePostYn
+                }
             }
         }
     }
