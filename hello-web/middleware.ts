@@ -2,7 +2,7 @@ import { NextResponse, NextRequest } from 'next/server'
 import { auth } from './auth';
  
 export async function middleware(request: NextRequest) {
-  // const session = await auth();
+  const session = await auth();
   const isAuthenticated = true;
  
   // If the user is authenticated, continue as normal
@@ -14,5 +14,5 @@ export async function middleware(request: NextRequest) {
 }
  
 export const config = {
-  matcher: '/admin/:path*',
+  matcher: ['/admin/:path*'],
 }
