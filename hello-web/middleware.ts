@@ -3,7 +3,7 @@ import { auth } from './auth';
  
 export async function middleware(request: NextRequest) {
   const session = await auth();
-  const isAuthenticated = true;
+  const isAuthenticated = session?.user.roleCode === 'ADMIN';
  
   // If the user is authenticated, continue as normal
   if (isAuthenticated) {
