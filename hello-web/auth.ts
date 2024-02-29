@@ -1,10 +1,8 @@
 import NextAuth from "next-auth"
 import GitHub from "next-auth/providers/github"
 import type { NextAuthConfig, Session } from 'next-auth';
-import { checkNotExistUserSession, createUserByEmail, getAccessToken, getUserSessionByEmail, setAccessToken } from "./utils/user";
-import { v4 as uuidv4 } from 'uuid';
+import { checkNotExistUserSession, createUserByEmail, getUserSessionByEmail } from "./utils/user";
 import _ from 'lodash';
-import { UserAccessToken } from "./types/user";
 
 export const config = {
   theme: {
