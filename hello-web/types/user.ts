@@ -24,7 +24,9 @@ export type User = {
 }
 
 export type UserSession = User & {
-  accessToken?: string;
+  provider: string;
+  providerAccountId: string;
+  accessToken: string;
   userRole: Omit<UserRole, 'createdAt' | 'updatedAt'>
 }
 
