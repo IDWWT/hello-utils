@@ -1,7 +1,7 @@
 import NextAuth from "next-auth"
 import GitHub from "next-auth/providers/github"
 import type { Account, NextAuthConfig, Session } from 'next-auth';
-import { checkNotExistUserSession, createUserByEmail, getUserSessionByEmail } from "./utils/user";
+import { checkNotExistUserSession, createUserByEmail, getUserSessionByEmail, setAccessToken } from "./utils/user";
 import _ from 'lodash';
 import { UserWithRole } from "./types/user";
 
@@ -57,6 +57,13 @@ export const config = {
       // console.log('trigger:', trigger)
       // console.log('session:', session)
 
+      // Persist the OAuth access_token to the token right after signin
+      if (account) {
+        token.accessToken = account.access_token;
+        token.provider = account.provider;
+        token.providerAccountId = account.providerAccountId;
+      }
+
       if (trigger === 'signIn') {
         const userEmail = token.email!;
         const userSession = await getUserSessionByEmail({ userEmail }) || await createUserByEmail({ userEmail });
@@ -64,14 +71,13 @@ export const config = {
           ...token,
           ...userSession,
         };
+
+        await setAccessToken({
+          userId: userSession.userId,
+          accessToken: token.accessToken as string,
+        });
       }
 
-      // Persist the OAuth access_token to the token right after signin
-      if (account) {
-        token.accessToken = account.access_token;
-        token.provider = account.provider;
-        token.providerAccountId = account.providerAccountId;
-      }
       // console.log('token-end:', token);
       return token
     },
