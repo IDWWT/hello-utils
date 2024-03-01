@@ -71,6 +71,12 @@ services:
         condition: service_healthy
       redis:
         condition: service_healthy
+    healthcheck:
+      test: ["CMD", "python", "/app/utils/health_check.py", "http://localhost:5000/health"]
+      interval: 5s
+      timeout: 3s
+      start_period: 0s
+      retries: 6
     ports:
       - 8000:5000
     env_file:
@@ -134,7 +140,7 @@ services:
       hello-web:
         condition: service_started
       hello-user:
-        condition: service_started
+        condition: service_healthy
     ports:
       - 80:80
       - 443:443
