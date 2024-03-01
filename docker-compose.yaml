@@ -12,6 +12,12 @@ services:
         condition: service_healthy
       redis:
         condition: service_healthy
+    healthcheck:
+      test: ["CMD", "java", "-cp", "/utils", "HttpHealthCheckUtility", "http://localhost:8080/health"]
+      interval: 5s
+      timeout: 3s
+      start_period: 0s
+      retries: 6
     ports:
       - 13020:8080 # application port
       - 13021:8000 # debugger port
@@ -142,7 +148,7 @@ services:
       target: development
     depends_on:
       hello-code:
-        condition: service_started
+        condition: service_healthy
       hello-web:
         condition: service_healthy
       hello-user:
