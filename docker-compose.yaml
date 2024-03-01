@@ -150,7 +150,7 @@ services:
       hello-code:
         condition: service_healthy
       hello-web:
-        condition: service_healthy
+        condition: service_started
       hello-user:
         condition: service_healthy
     ports:
