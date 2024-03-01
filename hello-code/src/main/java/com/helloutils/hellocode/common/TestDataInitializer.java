@@ -8,6 +8,7 @@ import jakarta.persistence.EntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 import javax.sql.DataSource;
@@ -15,6 +16,7 @@ import java.util.List;
 import java.util.Random;
 
 @Component
+@Profile({"dev", "local"})
 public class TestDataInitializer implements ApplicationRunner {
     private final UtilRepository utilRepository;
     private final EntityManager entityManager;
