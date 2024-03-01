@@ -12,6 +12,12 @@ services:
         condition: service_healthy
       redis:
         condition: service_healthy
+    healthcheck:
+      test: ["CMD", "java", "-cp", "/utils", "HttpHealthCheckUtility", "http://localhost:8080/health"]
+      interval: 5s
+      timeout: 3s
+      start_period: 0s
+      retries: 6
     ports:
       - 13020:8080 # application port
       - 13021:8000 # debugger port
@@ -40,6 +46,12 @@ services:
         condition: service_started
       hello-user:
         condition: service_started
+    healthcheck:
+      test: ["CMD", "node", "/utils/health-check.js", "http://localhost:3000"]
+      interval: 5s
+      timeout: 3s
+      retries: 6
+      start_period: 0s
     ports:
       - 13010:3000
     env_file:
@@ -71,6 +83,12 @@ services:
         condition: service_healthy
       redis:
         condition: service_healthy
+    healthcheck:
+      test: ["CMD", "python", "/app/utils/health_check.py", "http://localhost:5000/health"]
+      interval: 5s
+      timeout: 3s
+      start_period: 0s
+      retries: 6
     ports:
       - 8000:5000
     env_file:
@@ -130,11 +148,11 @@ services:
       target: development
     depends_on:
       hello-code:
-        condition: service_started
+        condition: service_healthy
       hello-web:
-        condition: service_started
+        condition: service_healthy
       hello-user:
-        condition: service_started
+        condition: service_healthy
     ports:
       - 80:80
       - 443:443

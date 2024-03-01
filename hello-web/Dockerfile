@@ -1,9 +1,20 @@
 ARG NODE_VERSION=20.11.0
 
+# transpile http check utility
+FROM node:${NODE_VERSION}-alpine as transpile
+WORKDIR /transpile
+COPY ./utils/health-check.ts /transpile
+RUN npm install -g npm@10.4.0 typescript && \
+    npm install -D @types/node && \
+    tsc ./health-check.ts
+
 # base stage
 FROM node:${NODE_VERSION}-alpine as base
 WORKDIR /app
 EXPOSE 13010
+
+RUN mkdir /utils
+COPY --from=transpile /transpile/health-check.js /utils
 
 RUN npm install -g npm@10.4.0
 
