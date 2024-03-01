@@ -40,6 +40,12 @@ services:
         condition: service_started
       hello-user:
         condition: service_started
+    healthcheck:
+      test: ["CMD", "node", "/utils/health-check.js", "http://localhost:3000"]
+      interval: 5s
+      timeout: 3s
+      retries: 6
+      start_period: 0s
     ports:
       - 13010:3000
     env_file:
@@ -138,7 +144,7 @@ services:
       hello-code:
         condition: service_started
       hello-web:
-        condition: service_started
+        condition: service_healthy
       hello-user:
         condition: service_healthy
     ports:
