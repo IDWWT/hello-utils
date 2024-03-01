@@ -2,7 +2,7 @@ import { auth } from "@/auth"
 import UserTable from "@/components/user-table";
 import { getUserList } from "@/utils/user";
 
-export default async function Header() {
+export default async function Page() {
   const session = await auth();
   const user = session?.user;
 
