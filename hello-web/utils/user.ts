@@ -21,6 +21,12 @@ export const setAccessToken = async ({ userId, accessToken }: UserAccessToken) =
   });
 }
 
+export const delAccessToken = async ({ userId }: Pick<User, 'userId'>): Promise<string | null> => {
+  return RedisConnection.redisExecutor(async (redisClient) => {
+    return await redisClient.del(`${userId}_accessToken`);
+  });
+}
+
 export const getUserIdByEmail = async ({ userEmail }: UserUniqueKey) => {
   const { data } = await getClient().query({ query: GET_USER_ID_BY_EMAIL, variables: { userEmail } });
   return data.users.edges[0]?.node?.userId;
