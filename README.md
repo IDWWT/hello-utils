@@ -36,6 +36,7 @@
     127.0.0.1 web.hello-utils.wiki
     127.0.0.1 code.hello-utils.wiki
     127.0.0.1 user.hello-utils.wiki
+    127.0.0.1 bff.hello-utils.wiki
     ```
 
 ## 실행방법
