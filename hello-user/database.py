@@ -5,7 +5,12 @@ from db_data.product import init_user_role, init_user_master
 from db_data.develop import init_user_master_dev
 import os
 
-engine = create_engine("mysql+pymysql://local_user:user1234@hello-db:3306/hello_util?charset=utf8mb4")
+HOST = os.environ['MYSQL_HOST']
+PORT = os.environ['MYSQL_PORT']
+USER = os.environ['MYSQL_USER']
+PASSWORD = os.environ['MYSQL_PASSWORD']
+
+engine = create_engine(f"mysql+pymysql://{USER}:{PASSWORD}@{HOST}:{PORT}/hello_util?charset=utf8mb4")
 db_session = scoped_session(
     sessionmaker(autocommit=False, autoflush=False, bind=engine)
 )
