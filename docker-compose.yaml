@@ -103,6 +103,26 @@ services:
         - action: rebuild
           path: ./hello-user/requirements.txt
 
+  hello-bff:
+    container_name: hello-bff
+    build:
+      context: ./hello-bff
+      dockerfile: Dockerfile
+      target: development
+    ports:
+      - 13025:5000
+    env_file:
+      - ./hello-bff/.env
+    develop:
+      watch:
+        - action: sync
+          path: ./hello-bff
+          target: /app
+          ignore:
+            - requirements.txt
+        - action: rebuild
+          path: ./hello-bff/requirements.txt
+
   mysql:
     container_name: hello-db
     image: mysql:latest
