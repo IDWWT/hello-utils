@@ -3,6 +3,7 @@ from flask_cors import CORS
 import requests
 import json
 import os
+from redis import Redis
 
 app = Flask(__name__)
 CORS(app)
@@ -11,6 +12,8 @@ REDIS_HOST = os.environ['REDIS_HOST']
 REDIS_PORT = os.environ['REDIS_PORT']
 HELLO_CODE_API_URL = os.environ['HELLO_CODE_API_URL']
 HELLO_USER_API_URL = os.environ['HELLO_USER_API_URL']
+
+redisClient = Redis.from_url(f'redis://{REDIS_HOST}:{REDIS_PORT}')
 
 @app.route("/")
 def home():
