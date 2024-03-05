@@ -3,7 +3,8 @@ import GitHub from "next-auth/providers/github"
 import type { Account, NextAuthConfig, Session } from 'next-auth';
 import { checkNotExistUserSession, createUserByEmail, getUserSessionByEmail, setAccessToken } from "./utils/user";
 import _ from 'lodash';
-import { UserWithRole } from "./types/user";
+import { UserAccessToken, UserWithRole } from "./types/user";
+import { cookies } from "next/headers";
 
 const extractPropertiesFromToken = (token: Record<string, unknown>) => {
   const userWithRole: (keyof UserWithRole)[] = ['userId', 'userEmail', 'roleCode', 'socialId', 'createdAt', 'updatedAt', 'userRole'];
@@ -72,10 +73,14 @@ export const config = {
           ...userSession,
         };
 
-        await setAccessToken({
+        const userAccessToken: UserAccessToken = {
           userId: userSession.userId,
           accessToken: token.accessToken as string,
-        });
+        };
+        await setAccessToken(userAccessToken);
+
+        const entries = Object.entries(userAccessToken);
+        entries.forEach(([key, value]) => cookies().set(key, value));
       }
 
       // console.log('token-end:', token);
