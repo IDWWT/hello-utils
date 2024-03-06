@@ -1,9 +1,9 @@
 import NextAuth from "next-auth"
 import GitHub from "next-auth/providers/github"
 import type { Account, NextAuthConfig, Session } from 'next-auth';
-import { checkNotExistUserSession, createUserByEmail, getUserSessionByEmail, setAccessToken } from "./utils/user";
+import { checkNotExistUserSession, createUserByEmail, getUserSessionByEmail, setAccessToken, setUserSession } from "./utils/user";
 import _ from 'lodash';
-import { UserAccessToken, UserWithRole } from "./types/user";
+import { SetUserAccessToken, GetUserAccessToken, UserSession, UserWithRole } from "./types/user";
 import { cookies } from "next/headers";
 
 const extractPropertiesFromToken = (token: Record<string, unknown>) => {
@@ -73,11 +73,11 @@ export const config = {
           ...userSession,
         };
 
-        const userAccessToken: UserAccessToken = {
+        const userAccessToken: SetUserAccessToken = {
           userId: userSession.userId,
           accessToken: token.accessToken as string,
         };
-        await setAccessToken(userAccessToken);
+        await setUserSession(extractPropertiesFromToken(token) as UserSession);
 
         const entries = Object.entries(userAccessToken);
         entries.forEach(([key, value]) => cookies().set(key, value));
