@@ -1,7 +1,8 @@
-import { UserAccessToken } from "@/types/user";
+import { GetUserAccessToken } from "@/types/user";
 import { ApolloClient, HttpLink, InMemoryCache } from "@apollo/client";
 import { registerApolloClient } from "@apollo/experimental-nextjs-app-support/rsc";
 import { cookies } from "next/headers";
+import { getXUserInfoFromCookie } from "./cookie";
 
 /**
  * middleware 에서 아래 에러 발생
@@ -29,18 +30,11 @@ import { cookies } from "next/headers";
 // });
 
 export const getClient = () => {
-  const keys: (keyof UserAccessToken)[] = ['userId', 'accessToken'];
-  const userToken = (keys as string[]).reduce((acc, cur) => {
-    acc[cur] = cookies().get(cur)?.value;
-    return acc;
-  }, {} as { [index: string]: string | undefined });
-
   return new ApolloClient({
     cache: new InMemoryCache(),
     link: new HttpLink({
       headers: {
-        "X-User-Id": cookies().get("userId")?.value || "",
-        "X-User-Token": cookies().get("accessToken")?.value || "",
+        ...getXUserInfoFromCookie(),
       },
       uri: `${process.env.HELLO_BFF_API_URL}/graphql`,
       fetchOptions: { cache: "no-store" },
