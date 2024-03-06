@@ -26,6 +26,15 @@ def user():
     # request.get_json() 사용시 에러 발생: {'errors': [{'message': 'POST body sent invalid JSON.'}]}
     data = request.data
 
+    # print(request.headers);
+    x_user_id = request.headers.get("X-User-Id")
+    x_access_token = request.headers.get("X-User-Token")
+    print(x_user_id, flush=True);
+    print(x_access_token, flush=True);
+    
+    user_session = redisClient.get(f"user_session_{x_user_id}")
+    print(user_session, flush=True);
+
     response = requests.post(f"{HELLO_USER_API_URL}/graphql", data=data, headers=headers)
 
     if response.status_code == 200:
