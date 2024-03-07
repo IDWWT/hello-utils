@@ -2,42 +2,33 @@ import { gql } from '@apollo/client';
 
 export const GET_USER_ID_BY_EMAIL = gql`
     query Users($userEmail: String!) {
-        usersRelay(first: 1, userEmail: $userEmail) {
-            totalCount
-            edges {
-                node {
-                    userId
-                }
-            }
+        users(userEmail: $userEmail) {
+            userId
         }
     }
 `;
 
 export const GET_USER_SESSION_BY_EMAIL = gql`
     query Users($userEmail: String!) {
-        usersRelay(first: 1, userEmail: $userEmail) {
-            edges {
-                node {
-                    userId
-                    userEmail
-                    roleCode
-                    socialId
-                    createdAt
-                    updatedAt
-                    userRole {
-                        roleCode
-                        roleName
-                        canEditPostYn
-                        canDeletePostYn
-                    }
-                }
+        users(userEmail: $userEmail) {
+            userId
+            userEmail
+            roleCode
+            socialId
+            createdAt
+            updatedAt
+            userRole {
+                roleCode
+                roleName
+                canEditPostYn
+                canDeletePostYn
             }
         }
     }
 `;
 
 export const GET_USER_LIST = gql`
-    query Users($first: Int!, $after: String) {
+    query UsersRelay($first: Int!, $after: String) {
         usersRelay(first: $first, after: $after) {
             totalCount
             edges {

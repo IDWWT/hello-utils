@@ -35,12 +35,12 @@ export const delAccessToken = async ({ userId }: Pick<User, 'userId'>): Promise<
 
 export const getUserIdByEmail = async ({ userEmail }: UserUniqueKey) => {
   const { data } = await getClient().query({ query: GET_USER_ID_BY_EMAIL, variables: { userEmail } });
-  return data.usersRelay.edges[0]?.node?.userId;
+  return data.users[0]?.userId;
 }
 
 export const getUserSessionByEmail = async ({ userEmail }: UserUniqueKey): Promise<UserWithRole | undefined> => {
   const { data } = await getClient().query({ query: GET_USER_SESSION_BY_EMAIL, variables: { userEmail } });
-  return data.usersRelay.edges[0]?.node;
+  return data.users[0];
 }
 
 export const getUserList = async ({ first, after }: UserSearchCondition) => {
