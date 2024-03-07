@@ -39,7 +39,7 @@ class UserMasterMutation(graphene.Mutation):
         return UserMasterMutation(user=user)
 
 class Query(graphene.ObjectType):
-    users = PageConnectionField(
+    users_relay = PageConnectionField(
         UserMaster,
         user_id=graphene.String(),
         user_email=graphene.String(),
