@@ -2,7 +2,7 @@ import { gql } from '@apollo/client';
 
 export const GET_USER_ID_BY_EMAIL = gql`
     query Users($userEmail: String!) {
-        users(first: 1, userEmail: $userEmail) {
+        usersRelay(first: 1, userEmail: $userEmail) {
             totalCount
             edges {
                 node {
@@ -15,7 +15,7 @@ export const GET_USER_ID_BY_EMAIL = gql`
 
 export const GET_USER_SESSION_BY_EMAIL = gql`
     query Users($userEmail: String!) {
-        users(first: 1, userEmail: $userEmail) {
+        usersRelay(first: 1, userEmail: $userEmail) {
             edges {
                 node {
                     userId
@@ -38,7 +38,7 @@ export const GET_USER_SESSION_BY_EMAIL = gql`
 
 export const GET_USER_LIST = gql`
     query Users($first: Int!, $after: String) {
-        users(first: $first, after: $after) {
+        usersRelay(first: $first, after: $after) {
             totalCount
             edges {
                 node {
