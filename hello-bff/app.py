@@ -5,6 +5,7 @@ import json
 import os
 from redis import Redis
 from ast import literal_eval
+from utils.graphql import get_root_field_name
 
 app = Flask(__name__)
 CORS(app)
@@ -25,7 +26,8 @@ def user():
     headers = {'Content-Type': 'application/json'}
 
     graphql_data = literal_eval(request.data.decode('utf-8'))
-    print(graphql_data.get('query'), flush=True)
+    graphql_query = graphql_data.get('query')
+    root_field_name = get_root_field_name(graphql_query)
 
     # print(request.headers);
     x_user_id = request.headers.get("X-User-Id")
