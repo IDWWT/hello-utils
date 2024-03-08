@@ -90,7 +90,7 @@ services:
       start_period: 0s
       retries: 6
     ports:
-      - 8000:5000
+      - 13030:5000
     env_file:
       - ./hello-user/.env
     develop:
@@ -110,7 +110,7 @@ services:
       dockerfile: Dockerfile
       target: development
     ports:
-      - 13025:5000
+      - 13031:5000
     env_file:
       - ./hello-bff/.env
     develop:
