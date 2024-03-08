@@ -41,6 +41,7 @@
 
 ## 실행방법
 
+### 로컬 개발환경 실행
 ```sh
 # start project
 ./scripts/start.sh
@@ -52,7 +53,18 @@
 docker compose logs -f <service-name>
 ```
 
-## python API 테스트 실행
+### python API 테스트 실행
 ``` sh
 docker exec -it hello-user python /app/test_graphql.py
 ```
+
+## 참고사항
+
+### 로컬 개발환경 포트
+
+* Nginx 13000 (hello-nginx)
+* MySQL 13001 (hello-db)
+* Redis 13002 (hello-redis)
+* 프론트 13010 (hello-web)
+* 백엔드 자바 13020, 13021 (hello-user)
+* 백엔드 파이썬 13030 (hello-user), 13031 (hello-bff)
