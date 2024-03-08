@@ -1,5 +1,8 @@
 import re
 
+# 변경이 불가능하도록 튜플 타입을 사용
+CALL_ONLY_ADMIN_QUERY = (["usersRelay"])
+
 def get_root_field_name(string):
     # 중괄호의 시작과 끝 인덱스를 찾음
     start_index = string.find('{') + 1
