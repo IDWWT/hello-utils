@@ -183,4 +183,4 @@ services:
 
 networks:
   default:
-    name: hell-network
+    name: hello-network
