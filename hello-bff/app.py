@@ -3,6 +3,10 @@ from flask_cors import CORS
 import requests
 import json
 import os
+from redis import Redis
+from ast import literal_eval
+from utils.graphql import get_root_field_name, CALL_ONLY_ADMIN_QUERY
+from utils.response import create_error_response
 
 app = Flask(__name__)
 CORS(app)
@@ -12,6 +16,8 @@ REDIS_PORT = os.environ['REDIS_PORT']
 HELLO_CODE_API_URL = os.environ['HELLO_CODE_API_URL']
 HELLO_USER_API_URL = os.environ['HELLO_USER_API_URL']
 
+redisClient = Redis.from_url(f'redis://{REDIS_HOST}:{REDIS_PORT}')
+
 @app.route("/")
 def home():
     return "Hello, World!"
@@ -20,10 +26,31 @@ def home():
 def user():
     headers = {'Content-Type': 'application/json'}
 
-    # request.get_json() 사용시 에러 발생: {'errors': [{'message': 'POST body sent invalid JSON.'}]}
-    data = request.data
+    graphql_data = literal_eval(request.data.decode('utf-8'))
+    graphql_query = graphql_data.get('query')
+    root_field_name = get_root_field_name(graphql_query)
 
-    response = requests.post(f"{HELLO_USER_API_URL}/graphql", data=data, headers=headers)
+    if root_field_name in CALL_ONLY_ADMIN_QUERY:
+        x_user_id = request.headers.get("X-User-Id")
+        x_access_token = request.headers.get("X-User-Token")
+        if not x_user_id or not x_access_token:
+            return create_error_response(401), 401
+
+        user_session = redisClient.get(f"user_session_{x_user_id}")
+        if user_session == None:
+            return create_error_response(401), 401
+        
+        user_session = json.loads(user_session)
+        print(user_session, flush=True);
+        
+        if user_session.get("accessToken") != x_access_token:
+            return create_error_response(401), 401
+        
+        if user_session.get("roleCode") != "ADMIN":
+            return create_error_response(403), 403
+
+    # request.get_json() 사용시 에러 발생: {'errors': [{'message': 'POST body sent invalid JSON.'}]}
+    response = requests.post(f"{HELLO_USER_API_URL}/graphql", data=request.data, headers=headers)
 
     if response.status_code == 200:
         return response.json(), 200

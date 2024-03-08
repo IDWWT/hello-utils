@@ -20,7 +20,7 @@ export default function UserTable() {
   if (loading) return <p>Loading ...</p>;
   if (error) return <p>Error! ${error.message}</p>;
 
-  const { totalCount, edges, pageCursors } = data.users as CursorBasedList<UserWithRole>;
+  const { totalCount, edges, pageCursors } = data.usersRelay as CursorBasedList<UserWithRole>;
 
   return (
     <div className="relative overflow-x-auto rounded-lg">

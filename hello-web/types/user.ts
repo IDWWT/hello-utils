@@ -4,9 +4,14 @@ export type UserUniqueKey = {
   userEmail: string;
 };
 
-export type UserAccessToken = {
+export type SetUserAccessToken = {
   userId: string;
   accessToken: string;
+}
+
+export type GetUserAccessToken = {
+  userId: string | undefined;
+  accessToken: string | undefined;
 }
 
 export type UserSearchCondition = {

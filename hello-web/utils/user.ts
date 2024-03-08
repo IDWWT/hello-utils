@@ -1,5 +1,5 @@
 import RedisConnection from "./redis";
-import { User, UserAccessToken, UserSearchCondition, UserWithRole, UserUniqueKey } from "@/types/user";
+import { User, GetUserAccessToken, UserSearchCondition, UserWithRole, UserUniqueKey, UserSession, SetUserAccessToken } from "@/types/user";
 import { getClient } from "./graphql-server";
 import { CREATE_USER_BY_EMAIL, GET_USER_ID_BY_EMAIL, GET_USER_LIST, GET_USER_SESSION_BY_EMAIL } from "@/graphql/user";
 import { Session } from "next-auth";
@@ -15,9 +15,15 @@ export const getAccessToken = async ({ userId }: Pick<User, 'userId'>): Promise<
   });
 }
 
-export const setAccessToken = async ({ userId, accessToken }: UserAccessToken) => {
+export const setAccessToken = async ({ userId, accessToken }: SetUserAccessToken) => {
   return RedisConnection.redisExecutor(async (redisClient) => {
     return await redisClient.set(`${userId}_accessToken`, accessToken, { EX: 259200 }); // 3일 후 만료
+  });
+}
+
+export const setUserSession = async (userSession: UserSession) => {
+  return RedisConnection.redisExecutor(async (redisClient) => {
+    return await redisClient.set(`user_session_${userSession.userId}`, JSON.stringify(userSession), { EX: 259200 }); // 3일 후 만료
   });
 }
 
@@ -29,12 +35,12 @@ export const delAccessToken = async ({ userId }: Pick<User, 'userId'>): Promise<
 
 export const getUserIdByEmail = async ({ userEmail }: UserUniqueKey) => {
   const { data } = await getClient().query({ query: GET_USER_ID_BY_EMAIL, variables: { userEmail } });
-  return data.users.edges[0]?.node?.userId;
+  return data.users[0]?.userId;
 }
 
 export const getUserSessionByEmail = async ({ userEmail }: UserUniqueKey): Promise<UserWithRole | undefined> => {
   const { data } = await getClient().query({ query: GET_USER_SESSION_BY_EMAIL, variables: { userEmail } });
-  return data.users.edges[0]?.node;
+  return data.users[0];
 }
 
 export const getUserList = async ({ first, after }: UserSearchCondition) => {

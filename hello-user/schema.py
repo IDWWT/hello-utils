@@ -14,6 +14,10 @@ class UserRole(SQLAlchemyObjectType):
 class UserMaster(SQLAlchemyObjectType):
     class Meta:
         model = UserMasterModel
+
+class UserMasteRelay(SQLAlchemyObjectType):
+    class Meta:
+        model = UserMasterModel
         interfaces = (graphene.relay.Node,)
         connection_class = PageConnection
 
@@ -39,8 +43,23 @@ class UserMasterMutation(graphene.Mutation):
         return UserMasterMutation(user=user)
 
 class Query(graphene.ObjectType):
-    users = PageConnectionField(
+    # API 호출 권한 없이 개방, 상세한 필터링은 제공하지 않도록 함
+    users = graphene.List(
         UserMaster,
+        user_email=graphene.String(required=True),
+    )
+
+    def resolve_users(self, info, **kwargs):
+        # info: GraphQL의 실행 컨텍스트와 쿼리 정보에 접근하고 제어하는 데 사용
+        query = UserMaster.get_query(info)
+
+        if kwargs.get("user_email"):
+            query = query.filter(UserMasterModel.user_email == kwargs.get("user_email"))
+
+        return query.all()
+
+    users_relay = PageConnectionField(
+        UserMasteRelay,
         user_id=graphene.String(),
         user_email=graphene.String(),
         role_code=graphene.String(),

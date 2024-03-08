@@ -11,10 +11,14 @@ import {
   NextSSRInMemoryCache,
   SSRMultipartLink,
 } from "@apollo/experimental-nextjs-app-support/ssr";
+import { getXUserInfoFromCookie } from "./cookie";
 
 function makeClient() {
   const httpLink = new HttpLink({
     uri: `${process.env.NEXT_PUBLIC_HELLO_BFF_API_URL}/graphql`,
+    headers: {
+      ...getXUserInfoFromCookie(),
+    },
   });
 
   return new NextSSRApolloClient({

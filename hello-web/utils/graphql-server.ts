@@ -1,5 +1,8 @@
+import { GetUserAccessToken } from "@/types/user";
 import { ApolloClient, HttpLink, InMemoryCache } from "@apollo/client";
 import { registerApolloClient } from "@apollo/experimental-nextjs-app-support/rsc";
+import { cookies } from "next/headers";
+import { getXUserInfoFromCookie } from "./cookie";
 
 /**
  * middleware 에서 아래 에러 발생
@@ -26,10 +29,15 @@ import { registerApolloClient } from "@apollo/experimental-nextjs-app-support/rs
 //   });
 // });
 
-export const getClient = () => new ApolloClient({
-  cache: new InMemoryCache(),
-  link: new HttpLink({
-    uri: `${process.env.HELLO_BFF_API_URL}/graphql`,
-    fetchOptions: { cache: "no-store" },
-  }),
-});
+export const getClient = () => {
+  return new ApolloClient({
+    cache: new InMemoryCache(),
+    link: new HttpLink({
+      headers: {
+        ...getXUserInfoFromCookie(),
+      },
+      uri: `${process.env.HELLO_BFF_API_URL}/graphql`,
+      fetchOptions: { cache: "no-store" },
+    }),
+  });
+}
