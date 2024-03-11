@@ -70,4 +70,4 @@ HTTP_STATUS_CODE_TO_NAME = MappingProxyType({
 def create_error_response (httpStatusCode):
     return {
         "errorMessage": HTTP_STATUS_CODE_TO_NAME.get(httpStatusCode)
-    }
+    }, httpStatusCode

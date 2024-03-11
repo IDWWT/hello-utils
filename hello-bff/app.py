@@ -23,7 +23,7 @@ def home():
     return "Hello, World!"
 
 @app.route("/graphql", methods=["GET", "POST"])
-def user():
+def graphql():
     headers = {'Content-Type': 'application/json'}
 
     graphql_data = literal_eval(request.data.decode('utf-8'))
@@ -34,20 +34,18 @@ def user():
         x_user_id = request.headers.get("X-User-Id")
         x_access_token = request.headers.get("X-User-Token")
         if not x_user_id or not x_access_token:
-            return create_error_response(401), 401
+            return create_error_response(401)
 
         user_session = redisClient.get(f"user_session_{x_user_id}")
         if user_session == None:
-            return create_error_response(401), 401
+            return create_error_response(401)
         
         user_session = json.loads(user_session)
-        print(user_session, flush=True);
-        
         if user_session.get("accessToken") != x_access_token:
-            return create_error_response(401), 401
+            return create_error_response(401)
         
         if user_session.get("roleCode") != "ADMIN":
-            return create_error_response(403), 403
+            return create_error_response(403)
 
     # request.get_json() 사용시 에러 발생: {'errors': [{'message': 'POST body sent invalid JSON.'}]}
     response = requests.post(f"{HELLO_USER_API_URL}/graphql", data=request.data, headers=headers)
