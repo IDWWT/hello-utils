@@ -3,6 +3,7 @@ import { UserSession } from "./types/user"
  
 declare module "next-auth" {
   interface Session {
-    user: UserSession & DefaultSession["user"]
+    user: UserSession & DefaultSession["user"];
+    expires: string;
   }
 }
