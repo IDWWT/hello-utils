@@ -1,0 +1,21 @@
+spring:
+  datasource:
+    url: jdbc:mysql://hello-db:3306/hello_util
+    username: local_user
+    password: user1234
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  sql:
+    init:
+      platform: mysql
+      mode: always
+  jpa:
+    hibernate:
+      ddl-auto: create
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+profiles:
+  active: local
+greeting:
+  message: this is local application.yml

@@ -1,0 +1,13 @@
+**/.gradle
+**/.idea
+**/.DS_Store
+**/.dockerignore
+**/.git
+**/.gitignore
+**/.vs
+**/.vscode
+**/docker-compose*
+**/Dockerfile*
+README.md
+target
+build/

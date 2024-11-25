@@ -1,0 +1,35 @@
+{
+  "name": "my-app",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@apollo/client": "^3.9.5",
+    "@apollo/experimental-nextjs-app-support": "^0.8.0",
+    "cookies-next": "^4.1.1",
+    "graphql": "^16.8.1",
+    "lodash": "^4.17.21",
+    "next": "14.1.0",
+    "next-auth": "^5.0.0-beta.5",
+    "react": "^18",
+    "react-dom": "^18",
+    "redis": "^4.6.12"
+  },
+  "devDependencies": {
+    "@types/lodash": "^4.14.202",
+    "@types/node": "^20.11.21",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "autoprefixer": "^10.4.17",
+    "eslint": "^8",
+    "eslint-config-next": "14.1.0",
+    "postcss": "^8.4.35",
+    "tailwindcss": "^3.4.1",
+    "typescript": "^5"
+  }
+}

@@ -1,0 +1,186 @@
+version: '3.8'
+
+services:
+  hello-code:
+    container_name: hello-code
+    build:
+      context: ./hello-code
+      dockerfile: Dockerfile
+      target: development
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "java", "-cp", "/utils", "HttpHealthCheckUtility", "http://localhost:8080/health"]
+      interval: 5s
+      timeout: 3s
+      start_period: 0s
+      retries: 6
+    ports:
+      - 13020:8080 # application port
+      - 13021:8000 # debugger port
+    env_file:
+      - ./hello-code/.env
+    develop:
+       watch:
+         - action: rebuild
+           path: ./hello-code/src
+           target: /app/src
+         - action: rebuild
+           path: ./hello-code/gradle
+         - action: rebuild
+           path: ./hello-code/build.gradle
+         - action: rebuild
+           path: ./hello-code/settings.gradle
+
+  hello-web:
+    container_name: hello-web
+    build:
+      context: ./hello-web
+      dockerfile: Dockerfile
+      target: development
+    depends_on:
+      hello-code:
+        condition: service_started
+      hello-user:
+        condition: service_started
+    healthcheck:
+      test: ["CMD", "node", "/utils/health-check.js", "http://localhost:3000"]
+      interval: 5s
+      timeout: 3s
+      retries: 6
+      start_period: 0s
+    ports:
+      - 13010:3000
+    env_file:
+      - ./hello-web/.env
+    develop:
+      watch:
+        - action: sync
+          path: ./hello-web
+          target: /app
+          ignore:
+            - node_modules
+            - package.json
+            - package-lock.json
+        - action: rebuild
+          path: ./hello-web/package.json
+        - action: rebuild
+          path: ./hello-web/package-lock.json
+        - action: rebuild
+          path: ./hello-web/next.config.js
+
+  hello-user:
+    container_name: hello-user
+    build:
+      context: ./hello-user
+      dockerfile: Dockerfile
+      target: development
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "python", "/app/utils/health_check.py", "http://localhost:5000/health"]
+      interval: 5s
+      timeout: 3s
+      start_period: 0s
+      retries: 6
+    ports:
+      - 13030:5000
+    env_file:
+      - ./hello-user/.env
+    develop:
+      watch:
+        - action: sync
+          path: ./hello-user
+          target: /app
+          ignore:
+            - requirements.txt
+        - action: rebuild
+          path: ./hello-user/requirements.txt
+
+  hello-bff:
+    container_name: hello-bff
+    build:
+      context: ./hello-bff
+      dockerfile: Dockerfile
+      target: development
+    ports:
+      - 13031:5000
+    env_file:
+      - ./hello-bff/.env
+    develop:
+      watch:
+        - action: sync
+          path: ./hello-bff
+          target: /app
+          ignore:
+            - requirements.txt
+        - action: rebuild
+          path: ./hello-bff/requirements.txt
+
+  mysql:
+    container_name: hello-db
+    image: mysql:latest
+    restart: always
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "$MYSQL_USER", "-p$MYSQL_PASSWORD"]
+      interval: 5s
+      timeout: 3s
+      start_period: 0s
+      retries: 6
+    env_file:
+      - ./mysql/.env
+    ports:
+      - "13001:3306"
+    command:
+      [
+        "mysqld",
+        "--character-set-server=utf8mb4",
+        "--collation-server=utf8mb4_bin"
+      ]
+    volumes:
+      - ./mysql/data:/var/lib/mysql
+    user: mysql
+
+  redis:
+    container_name: hello-redis
+    image: redis:latest
+    healthcheck:
+      test: [ "CMD", "redis-cli", "--raw", "incr", "ping" ]
+      interval: 5s
+      timeout: 3s
+      start_period: 0s
+      retries: 6
+    ports:
+      - "13002:6379"
+    command: redis-server
+
+  nginx:
+    container_name: hello-nginx
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile
+      target: development
+    depends_on:
+      hello-code:
+        condition: service_healthy
+      hello-web:
+        condition: service_started
+      hello-user:
+        condition: service_healthy
+    ports:
+      - 80:80
+      - 443:443
+    develop:
+      watch:
+        - action: sync+restart
+          path: ./nginx/config/nginx.conf
+
+networks:
+  default:
+    name: hello-network

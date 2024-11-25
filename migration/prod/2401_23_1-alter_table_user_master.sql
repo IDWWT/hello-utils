@@ -1,0 +1,2 @@
+ALTER TABLE user_master
+MODIFY COLUMN created_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP;
